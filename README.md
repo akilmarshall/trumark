@@ -2,6 +2,7 @@
 Trumark is a database system that implements a website front end to facilitate querying of the database. Queries are string based using a tag systems "inspired" by [scryfall](https://scryfall.com/docs/syntax).
 
 ## Todo
+* update schema to reflect the intended implementation
 * implement search box stump
 * database implementation
 * magic card data mass import
@@ -17,7 +18,7 @@ Trumark is a database system that implements a website front end to facilitate q
 #### Schema
 ![ER diagram](schema/ER_diagram.png)
 
-Note: as the schema is updated the dot file must also be updated and compiled to reflect those changes.
+Note: as the schema is updated the dot file must also be updated and compiled to reflect those changes (use the makefile).
 
 ## Dependencies
 - python 3.3+
