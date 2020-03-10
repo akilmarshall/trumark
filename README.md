@@ -34,4 +34,4 @@ Note: as the schema is updated the dot file must also be updated and compiled to
 ## Developed by:
 - Akil **Mar**shall
 - John **K**uroda
-- Israel **Tru**esdale
+- Israel **Tru**sdell
