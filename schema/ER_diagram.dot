@@ -11,162 +11,62 @@ digraph {
         <tr><td port="3">num_players</td></tr>
         <tr><td port="4">copies_allowed</td></tr>
         </table>>];
+
     Set [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>SET</i></td></tr>
-        <tr><td port="1"><u><font color="red">set_num</font></u></td></tr>
-        <tr><td port="1"><u><font color="black">set_name</font></u></td></tr>
+        <tr><td port="1"><u><font color="black">set_num</font></u></td></tr>
+        <tr><td port="1"><font color="black">set_name</font></td></tr>
         <tr><td port="2">year</td></tr>
         </table>>];
+
     Card [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>CARD</i></td></tr>
         <tr><td port="1"><u><font color="black">card_name</font></u></td></tr>
-        <tr><td port="3">supertype</td></tr>
-        <tr><td port="4">color_identity</td></tr>
-        <tr><td port="5">colorless</td></tr>
-        <tr><td port="6">color_letters</td></tr>
-        <tr><td port="7">text</td></tr>
-        <tr><td port="8">converted_cost</td></tr>
-
+        <tr><td port="6">color_identity</td></tr>
+        <tr><td port="7">colorless</td></tr>
+        <tr><td port="8">color_letters</td></tr>
+        <tr><td port="9">text</td></tr>
+        <tr><td port="10">converted_cost</td></tr>
         </table>>];
-        subgraph cluster_artifact {
-            rank=same;
-            style=invis;
-            Artifact [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>ARTIFACT</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                </table>>];
-            Artifact_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>ARTIFACT_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-        }
-        subgraph cluster_land {
-            rank=same;
-            style=invis;
-            Land [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>LAND</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2">non_basic</td></tr>
-                </table>>];
-            Land_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>LAND_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-            }
-        subgraph cluster_enchantment {
-            rank=same;
-            style=invis;
-            Enchantment [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>ENCHANTMENT</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                </table>>];
-            Enchantment_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>ENCHANTMENT_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-            }
-        subgraph cluster_planeswalker {
-            rank=same;
-            style=invis;
-            Planeswalker [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>PLANESWALKER</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="3">loyalty</td></tr>
-                </table>>];
-            Planeswalker_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>PLANESWALKER_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-            }
-        subgraph cluster_sorcery {
-            rank=same;
-            style=invis;
-            Sorcery [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>SORCERY</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                </table>>];
-            Sorcery_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>SORCERY_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-            }
-        subgraph cluster_instant {
-            rank=same;
-            style=invis;
-            Instant [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>INSTANT</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                </table>>];
-            Instant_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>INSTANT_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-            }
-        subgraph cluster_creature {
-            rank=same;
-            style=invis;
-            Creature [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>CREATURE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="3">power</td></tr>
-                <tr><td port="4">toughness</td></tr>
-                </table>>];
-            Creature_subtype [label=<
-                <table border="0" cellborder="1" cellspacing="0">
-                <tr><td><i>CREATURE_SUBTYPE</i></td></tr>
-                <tr><td port="1"><u>card_name</u></td></tr>
-                <tr><td port="2"><u>set_name</u></td></tr>
-                <tr><td port="2">subtype</td></tr>
-                </table>>];
-            }
+
+    Card [label=<
+        <table border="0" cellborder="1" cellspacing="0">
+        <tr><td><i>CARD</i></td></tr>
+        <tr><td port="1"><u><font color="black">card_name</font></u></td></tr>
+        <tr><td port="2">color_identity</td></tr>
+        <tr><td port="3">colorless</td></tr>
+        <tr><td port="4">color_letters</td></tr>
+        <tr><td port="5">text</td></tr>
+        <tr><td port="6">converted_cost</td></tr>
+        <tr><td port="7">type</td></tr>
+        <tr><td port="8">supertype</td></tr>
+        </table>>];
 
     Contains [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>CONTAINS</i></td></tr>
-        <tr><td port="1"><u>set_name</u></td></tr>
+        <tr><td port="1"><u>set_num</u></td></tr>
         <tr><td port="2"><u>card_name</u></td></tr>
         <tr><td port="3">rarity</td></tr>
         </table>>];
+
     Is_allowed [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>IS_ALLOWED</i></td></tr>
-        <tr><td port="1"><u>set_name</u></td></tr>
+        <tr><td port="1"><u>set_num</u></td></tr>
         <tr><td port="2"><u>format_name</u></td></tr>
         </table>>];
+
     Double_card [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>DOUBLE_CARD</i></td></tr>
         <tr><td port="1"><u>side_a</u></td></tr>
         <tr><td port="2"><u>side_b</u></td></tr>
-        <tr><td port="3"><u>set_name</u></td></tr>
+        <tr><td port="3"><u>set_num</u></td></tr>
         </table>>];
+
     Limitation [label=< <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>LIMITATION</i></td></tr>
     <tr><td port="1"><u>format_name</u></td></tr>
@@ -174,45 +74,27 @@ digraph {
     <tr><td port="3">limitation_type</td></tr>
     </table>>];
 
-    Contains:1 -> Set:1 [color=red];
-    Contains:2 -> Card:1;
+    Subtype [label=<
+        <table border="0" cellborder="1" cellspacing="0">
+        <tr><td><i>TYPE</i></td></tr>
+        <tr><td port="1"><u>card_name</u></td></tr>
+        <tr><td port="2">subtype</td></tr>
+        </table>>];
 
-    Is_allowed:1 -> Set:1 [color=red];
+    Is_allowed:1 -> Set:1 [color=black];
     Is_allowed:2 -> Format:1;
+
+    Contains:1 -> Set:1 [color=black];
+    Contains:2 -> Card:1;
 
     Limitation:1 -> Format:1;
     Limitation:2 -> Card:1;
 
-    Double_card:1 -> Card:1;
-    Double_card:2 -> Card:1;
+    edge [dir="back"];
 
-    Artifact:1 -> Card:1;
-    Artifact_subtype:1 -> Card:1;
-    Artifact_subtype:2 -> Set:1 [color=red];
+    Card:1 -> Subtype:1 ;
 
-    Creature:1 -> Card:1;
-    Creature_subtype:1 -> Card:1
-    Creature_subtype:2 -> Set:1 [color=red];
-
-    Land:1 -> Card:1;
-    Land_subtype:1 -> Card:1;
-    Land_subtype:2 -> Set:1 [color=red];
-
-    Enchantment:1 -> Card:1;
-    Enchantment_subtype:1 -> Card:1;
-    Enchantment_subtype:2 -> Set:1 [color=red];
-
-    Planeswalker:1 -> Card:1;
-    Planeswalker_subtype:1 -> Card:1;
-    Planeswalker_subtype:2 -> Set:1 [color=red];
-
-    Sorcery:1 -> Card:1;
-    Sorcery_subtype:1 -> Card:1;
-    Sorcery_subtype:2 -> Set:1 [color=red];
-
-    Instant:1 -> Card:1;
-    Instant_subtype:1 -> Card:1;
-    Instant_subtype:2 -> Set:1 [color=red];
-
-    Double_card:3 -> Set:1 [color=red];
+    Card:1 -> Double_card:1;
+    Card:1 -> Double_card:2;
+    Set:1 -> Double_card:3;
 }
