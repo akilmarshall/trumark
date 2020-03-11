@@ -1,0 +1,414 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm, graphicx, enumerate, siunitx, textgreek, multicol}
+
+
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiom}{Axiom}
+\newtheorem*{remark}{Remark}
+\newtheorem*{definition}{Definition}
+
+\title{Magic: The Gathering Database Schema Overview}
+\author{John Kuroda\\Akil Marshall\\Israel Trusdell}
+\begin{document}
+\maketitle
+\section{Overall Structure}
+\section{Entities}
+\subsection{FORMAT}
+\subsection{SET}
+\subsection{CARD}
+\section{Relationships}
+\subsection{CONTAINS}
+\subsection{DOUBLE\_CARD}
+\subsection{IS\_ALLOWED}
+\subsection{LIMITATION}
+\subsection{SUBTYPE}
+\section{Lists of Type Instances}
+\subsection{Supertype}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Basic
+        \item Host
+        \item Legendary
+        \item Snow
+        \item World
+    \end{itemize}
+\end{multicols}
+\subsection{Artifact}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Clue
+        \item Contraption
+        \item Equipment
+        \item Food
+        \item Fortification
+        \item Gold
+        \item Key
+        \item Treasure
+        \item Vehicle
+    \end{itemize}
+\end{multicols}
+\subsection{Creature}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Advisor
+        \item Aetherborn
+        \item Ally
+        \item Angel
+        \item Antelope
+        \item Ape
+        \item Archer
+        \item Archon
+        \item Army
+        \item Artificer
+        \item Assassin
+        \item Assembly-Worker
+        \item Atog
+        \item Aurochs
+        \item Avatar
+        \item Azra
+        \item Badger
+        \item Barbarian
+        \item Basilisk
+        \item Bat
+        \item Bear
+        \item Beast
+        \item Beeble
+        \item Berserker
+        \item Bird
+        \item Blinkmoth
+        \item Boar
+        \item Bringer
+        \item Brushwagg
+        \item Camarid
+        \item Camel
+        \item Caribou
+        \item Carrier
+        \item Cat
+        \item Centaur
+        \item Cephalid
+        \item Chimera
+        \item Citizen
+        \item Cleric
+        \item Cockatrice
+        \item Construct
+        \item Coward
+        \item Crab
+        \item Crocodile
+        \item Cyclops
+        \item Dauthi
+        \item Demigod
+        \item Demon
+        \item Deserter
+        \item Devil
+        \item Dinosaur
+        \item Djinn
+        \item Dragon
+        \item Drake
+        \item Dreadnought
+        \item Drone
+        \item Druid
+        \item Dryad
+        \item Dwarf
+        \item Efreet
+        \item Egg
+        \item Elder
+        \item Eldrazi
+        \item Elemental
+        \item Elephant
+        \item Elf
+        \item Elk
+        \item Eye
+        \item Faerie
+        \item Ferret
+        \item Fish
+        \item Flagbearer
+        \item Fox
+        \item Frog
+        \item Fungus
+        \item Gargoyle
+        \item Germ
+        \item Giant
+        \item Gnome
+        \item Goat
+        \item Goblin
+        \item God
+        \item Golem
+        \item Gorgon
+        \item Graveborn
+        \item Gremlin
+        \item Griffin
+        \item Hag
+        \item Harpy
+        \item Hellion
+        \item Hippo
+        \item Hippogriff
+        \item Homarid
+        \item Homunculus
+        \item Horror
+        \item Horse
+        \item Hound
+        \item Human
+        \item Hydra
+        \item Hyena
+        \item Illusion
+        \item Imp
+        \item Incarnation
+        \item Insect
+        \item Jackal
+        \item Jellyfish
+        \item Juggernaut
+        \item Kavu
+        \item Kirin
+        \item Kithkin
+        \item Knight
+        \item Kobold
+        \item Kor
+        \item Kraken
+        \item Lamia
+        \item Lammasu
+        \item Leech
+        \item Leviathan
+        \item Lhurgoyf
+        \item Licid
+        \item Lizard
+        \item Manticore
+        \item Masticore
+        \item Mercenary
+        \item Merfolk
+        \item Metathran
+        \item Minion
+        \item Minotaur
+        \item Mole
+        \item Monger
+        \item Mongoose
+        \item Monk
+        \item Monkey
+        \item Moonfolk
+        \item Mouse
+        \item Mutant
+        \item Myr
+        \item Mystic
+        \item Naga
+        \item Nautilus
+        \item Nephilim
+        \item Nightmare
+        \item Nightstalker
+        \item Ninja
+        \item Noble
+        \item Noggle
+        \item Nomad
+        \item Nymph
+        \item Octopus
+        \item Ogre
+        \item Ooze
+        \item Orb
+        \item Orc
+        \item Orgg
+        \item Ouphe
+        \item Ox
+        \item Oyster
+        \item Pangolin
+        \item Peasant
+        \item Pegasus
+        \item Pentavite
+        \item Pest
+        \item Phelddagrif
+        \item Phoenix
+        \item Pilot
+        \item Pincher
+        \item Pirate
+        \item Plant
+        \item Praetor
+        \item Prism
+        \item Processor
+        \item Rabbit
+        \item Rat
+        \item Rebel
+        \item Reflection
+        \item Rhino
+        \item Rigger
+        \item Rogue
+        \item Sable
+        \item Salamander
+        \item Samurai
+        \item Sand
+        \item Saproling
+        \item Satyr
+        \item Scarecrow
+        \item Scion
+        \item Scorpion
+        \item Scout
+        \item Sculpture
+        \item Serf
+        \item Serpent
+        \item Servo
+        \item Shade
+        \item Shaman
+        \item Shapeshifter
+        \item Sheep
+        \item Siren
+        \item Skeleton
+        \item Slith
+        \item Sliver
+        \item Slug
+        \item Snake
+        \item Soldier
+        \item Soltari
+        \item Spawn
+        \item Specter
+        \item Spellshaper
+        \item Sphinx
+        \item Spider
+        \item Spike
+        \item Spirit
+        \item Splinter
+        \item Sponge
+        \item Squid
+        \item Squirrel
+        \item Starfish
+        \item Surrakar
+        \item Survivor
+        \item Tentacle
+        \item Tetravite
+        \item Thalakos
+        \item Thopter
+        \item Thrull
+        \item Treefolk
+        \item Trilobite
+        \item Triskelavite
+        \item Troll
+        \item Turtle
+        \item Unicorn
+        \item Vampire
+        \item Vedalken
+        \item Viashino
+        \item Volver
+        \item Wall
+        \item Warlock
+        \item Warrior
+        \item Weird
+        \item Werewolf
+        \item Whale
+        \item Wizard
+        \item Wolf
+        \item Wolverine
+        \item Wombat
+        \item Worm
+        \item Wraith
+        \item Wurm
+        \item Yeti
+        \item Zombie
+        \item Zubera
+    \end{itemize}
+\end{multicols}
+\subsection{Enchantment}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Aura
+        \item Carouche
+        \item Curse
+        \item Saga
+        \item Shrine
+    \end{itemize}
+\end{multicols}
+\subsection{Land}
+\subsubsection{Basic}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Plains
+        \item Island
+        \item Swamp
+        \item Mountain
+        \item Forest
+    \end{itemize}
+\end{multicols}
+\subsubsection{Non-Basic}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Desert
+        \item Gate
+        \item Lair
+        \item Locus
+        \item Urza's
+        \item Mine
+        \item Power-Plant
+        \item Tower
+    \end{itemize}
+\end{multicols}
+\subsection{Planeswalker}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Ajani
+        \item Aminatou
+        \item Angrath
+        \item Arlinn
+        \item Ashiok
+        \item Bolas
+        \item Chandra
+        \item Dack
+        \item Daretti
+        \item Davriel
+        \item Domri
+        \item Dovin
+        \item Elspeth
+        \item Estrid
+        \item Freyalise
+        \item Garruk
+        \item Gideon
+        \item Huatli
+        \item Jace
+        \item Jaya
+        \item Karn
+        \item Kasmina
+        \item Kaya
+        \item Kiora
+        \item Koth
+        \item Liliana
+        \item Nahiri
+        \item Narset
+        \item Nissa
+        \item Nixilis
+        \item Oko
+        \item Ral
+        \item Rowan
+        \item Saheeli
+        \item Samut
+        \item Sarkhan
+        \item Serra
+        \item Sorin
+        \item Tamiyo
+        \item Teferi
+        \item Teyo
+        \item Tezzeret
+        \item Tibalt
+        \item Ugin
+        \item Venser
+        \item Vivien
+        \item Vraska
+        \item Will
+        \item Windgrace
+        \item Wrenn
+        \item Xenagos
+        \item Yanggu
+        \item Yanling
+    \end{itemize}
+\end{multicols}
+\subsection{Instant}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Adventure
+        \item Arcane
+        \item Trap
+    \end{itemize}
+\end{multicols}
+\subsection{Sorcery}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item Adventure
+        \item Arcane
+    \end{itemize}
+\end{multicols}
+\end{document}

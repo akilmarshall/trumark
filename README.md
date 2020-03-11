@@ -18,6 +18,7 @@ Trumark is a database system that implements a website front end to facilitate q
 Note: SQLite database files can be interacted with via the command line ([link](https://sqlite.org/cli.html))
 
 #### Schema
+[Diagram Documentation](documentation/documentation.pdf)}
 ![ER diagram](schema/ER_diagram.png)
 
 Note: as the schema is updated the dot file must also be updated and compiled to reflect those changes (use the makefile).
