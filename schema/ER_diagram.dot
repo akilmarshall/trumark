@@ -43,6 +43,9 @@ digraph {
         <tr><td port="7">converted_cost</td></tr>
         <tr><td port="8">type</td></tr>
         <tr><td port="9">supertype</td></tr>
+        <tr><td port="10">power</td></tr>
+        <tr><td port="11">toughness</td></tr>
+        <tr><td port="12">loyalty</td></tr>
         </table>>];
 
     Contains [label=<
