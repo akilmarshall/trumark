@@ -22,7 +22,7 @@ Note: SQLite database files can be interacted with via the command line ([link](
 [Diagram Documentation](documentation/documentation.pdf)
 ![ER diagram](schema/ER_diagram.png)
 
-Note: as the schema is updated the dot file must also be updated and compiled to reflect those changes (use the makefile).
+Note: as the schema/documentation is updated the diagram/document must be recompiled (using the make files) so the changes are reflected visually.
 
 ## Dependencies
 - python 3.3+
