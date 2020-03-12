@@ -1,0 +1,25 @@
+\contentsline {section}{\numberline {1}Overall Structure}{2}% 
+\contentsline {section}{\numberline {2}Entities}{2}% 
+\contentsline {subsection}{\numberline {2.1}FORMAT}{2}% 
+\contentsline {subsection}{\numberline {2.2}SET}{2}% 
+\contentsline {subsection}{\numberline {2.3}CARD}{2}% 
+\contentsline {subsubsection}{\numberline {2.3.1}Type: Creature}{2}% 
+\contentsline {subsubsection}{\numberline {2.3.2}Type: Planeswalker}{2}% 
+\contentsline {subsubsection}{\numberline {2.3.3}Type: Land}{3}% 
+\contentsline {section}{\numberline {3}Relationships}{3}% 
+\contentsline {subsection}{\numberline {3.1}CONTAINS}{3}% 
+\contentsline {subsection}{\numberline {3.2}DOUBLE\_CARD}{3}% 
+\contentsline {subsection}{\numberline {3.3}IS\_ALLOWED}{3}% 
+\contentsline {subsection}{\numberline {3.4}LIMITATION}{3}% 
+\contentsline {subsection}{\numberline {3.5}SUBTYPE}{3}% 
+\contentsline {section}{\numberline {4}Lists of Type Instances}{3}% 
+\contentsline {subsection}{\numberline {4.1}Supertype}{3}% 
+\contentsline {subsection}{\numberline {4.2}Artifact}{3}% 
+\contentsline {subsection}{\numberline {4.3}Creature}{4}% 
+\contentsline {subsection}{\numberline {4.4}Enchantment}{7}% 
+\contentsline {subsection}{\numberline {4.5}Land}{7}% 
+\contentsline {subsubsection}{\numberline {4.5.1}Basic}{7}% 
+\contentsline {subsubsection}{\numberline {4.5.2}Non-Basic}{7}% 
+\contentsline {subsection}{\numberline {4.6}Planeswalker}{7}% 
+\contentsline {subsection}{\numberline {4.7}Instant}{8}% 
+\contentsline {subsection}{\numberline {4.8}Sorcery}{8}% 

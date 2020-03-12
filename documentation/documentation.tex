@@ -14,16 +14,57 @@
 \author{John Kuroda\\Akil Marshall\\Israel Trusdell}
 \begin{document}
 \maketitle
+\tableofcontents
+\newpage
 \section{Overall Structure}
+A CARD can be in more than one set.
+CARDs are identified by their name and the SET they are printed in.
+FORMATs have a list of allowed SETs.
+CARDs can be Restricted in a FORMAT (limited to 1 copy) or Banned in a FORMAT.
+% CARD is a superclass (generalization) of CREATURE, ARTIFACT, LAND, ENCHANTMENT, PLANESWALKER, SORCERY, INSTANT.
+% A CARD can be in multiple subcategories, i.e., “Artifact Land”, “Artifact Creature”, or ``Enchantment Creature''.
+SETs contain CARDs.
+
 \section{Entities}
 \subsection{FORMAT}
+FORMATs have names that identify them.
+A FORMAT is a game type with a set of rules and a list of allowed SETs.
+FORMATs also have a list of restricted cards and banned cards.  Entire sets are not necessarily illegal as a whole because cards in a set that is not allowed may show up in a set that is allowed.
+FORMATs have a predetermined deck size.
+FORMATs have a maximum number of players per game (can be $\infty$).
 \subsection{SET}
+A SET has a unique number, name, and the year it was released.
 \subsection{CARD}
+A CARD has a name but could be in multiple SETs so the SET name is used in conjunction to make a unique CARD identification.
+CARD cost is NA$\star$ where N $\in \mathbb{Z}_{\geq 0}$ and $A \in {B, U, R, G, W}$ for black, blue, red, green, white and $\star$ is zero or more.
+Converted cost is a calculated attribute and is the numerical count of the colorless cost plus color cost.
+Super type can be Legendary, Snow, or other super types.
+CARD text can may extra information about the card and its abilities.
+A card is associated with a color, (including colorless) but may not have a casting cost (e.g. Swamp).
+\subsubsection{Type: Creature}
+% All CREATUREs inherit from CARD.
+A CREATURE has the attributes of power and toughness. %(in addition to inherited attributes).
+A CREATURE can have subtypes, e.g., Merfolk or Slivers.
+\subsubsection{Type: Planeswalker}
+% All PLANESWALKERs inherit from CARD.
+PLANESWALKERs have subtype, e.g., Ajani or Angrath.
+PLANESWALKERs have the unique attribute of Loyalty.
+\subsubsection{Type: Land}
+All LANDs inherit from CARD.
+Color identity can be one or more of the five colors (RUBWG) or colorless, e.g.  Mountains would be associated with R.
+LANDs have a subtype, e.g. Gate or “Swamp Mountain” (Badlands, a true dual land).
 \section{Relationships}
 \subsection{CONTAINS}
+SETs must Contain CARDs.
+CARDs must be a part of some SET, and could be in more that one.
 \subsection{DOUBLE\_CARD}
 \subsection{IS\_ALLOWED}
+One or more SETs can be allowed in gameplay in one or more FORMATs.
 \subsection{LIMITATION}
+A FORMAT can limit the CARDs used by restricting them, banning them, or deeming them illegal to use.
+Restricted means only one copy of any nonbasic land CARD allowed in a deck.
+A banned CARD is where the CARD is contained in an allowed SET, but is not allowed in gameplay.
+An illegal CARD is one that is not allowed for other reasons such as being in a SET that is not allowed in the FORMAT.
 \subsection{SUBTYPE}
 \section{Lists of Type Instances}
 \subsection{Supertype}
