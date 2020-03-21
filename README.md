@@ -1,5 +1,5 @@
 # CS 421 Database Project
-Trumark is a database system that implements a website front end to facilitate querying of the database. Queries are string based using a tag systems "inspired" (read ripped) by [scryfall](https://scryfall.com/docs/syntax).
+Trumark is a database system that implements a website front end to facilitate querying of the database. Queries are string based using a tag systems "inspired" (read ripped) from [scryfall](https://scryfall.com/docs/syntax).
 
 ## Todo
 * should color_identity in the CARD table be a multivalued attribute? (lands can be identified as having one or more colors)?
