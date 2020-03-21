@@ -1,5 +1,11 @@
 \documentclass{article}
 \usepackage{amsmath, amssymb, amsthm, graphicx, enumerate, siunitx, textgreek, multicol}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+}
 
 
 \newtheorem{theorem}{Theorem}%[section]
@@ -16,7 +22,8 @@
 \maketitle
 \tableofcontents
 \newpage
-\section{Overall Structure}
+\section{Philosophy of Design}
+% A CARD is the primary object this database is designed around. A CARD may be printed in one or more SETs. A SET can be uniquely identified by it's set_name or it's set_num. 
 A CARD can be in more than one set.
 CARDs are identified by their name and the SET they are printed in.
 FORMATs have a list of allowed SETs.
@@ -41,6 +48,33 @@ Converted cost is a calculated attribute and is the numerical count of the color
 Super type can be Legendary, Snow, or other super types.
 CARD text can may extra information about the card and its abilities.
 A card is associated with a color, (including colorless) but may not have a casting cost (e.g. Swamp).
+\subsection{COLOR}
+Each CARD is associated with one ore more colors (indicated by the CARDS physical color).
+\subsection{COLOR\_COST}
+Each CARD has some cost associated with it. A cost is a string over the alphabet $\{W, U, B, R, G, C, \#\}$
+\begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
+    \centering
+    \caption{Official mana text abbreviations}
+    \label{tab:cost_table}
+    \begin{tabular}{cc}
+        Color & Letter \\
+        \hline
+        Colorless & \# \\
+        White & B \\
+        Blue & U \\
+        Black & B \\
+        Red & R \\
+        Green & G \\
+        \hline
+    \end{tabular}
+\end{table}
+(\# represents any integer greater than 0, $ \mathbb{Z}_{>0}$)
+
+A valid cost string must begin with the colorless cost if it is greater than 0. For example \href{https://scryfall.com/card/pbfz/209s/bring-to-light}{\underline{Bring to Light}} is properly described with the cost string ``3WU'' or ``3UW'' but not by ``WU3''. The ordering of the letters mana letters following the number does not matter.
+
+Each CARD also has a converted\_cost which is the over it's colored/colorless costs, i.e., Bring to Light has a converted cost of 5. 
+\subsection{COLOR\_IDENTITY}
+Each mana symbol that appears on a CARD is included within that CARDs color identity. Each CARD is associated with one or more colors.
 \subsubsection{Type: Creature}
 % All CREATUREs inherit from CARD.
 A CREATURE has the attributes of power and toughness. %(in addition to inherited attributes).
