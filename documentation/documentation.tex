@@ -65,6 +65,7 @@ Each CARD has some cost associated with it. A cost is a string over the alphabet
         Black & B \\
         Red & R \\
         Green & G \\
+        Optional & X \\
         \hline
     \end{tabular}
 \end{table}
@@ -73,6 +74,8 @@ Each CARD has some cost associated with it. A cost is a string over the alphabet
 A valid cost string must begin with the colorless cost if it is greater than 0. For example \href{https://scryfall.com/card/pbfz/209s/bring-to-light}{\underline{Bring to Light}} is properly described with the cost string ``3WU'' or ``3UW'' but not by ``WU3''. The ordering of the letters mana letters following the number does not matter.
 
 Each CARD also has a converted\_cost which is the over it's colored/colorless costs, i.e., Bring to Light has a converted cost of 5. 
+
+Finally each CARD may be associated with one more costs (multi cost cards) [link NEEDED]
 \subsection{COLOR\_IDENTITY}
 Each mana symbol that appears on a CARD is included within that CARDs color identity. Each CARD is associated with one or more colors.
 \subsubsection{Type: Creature}
