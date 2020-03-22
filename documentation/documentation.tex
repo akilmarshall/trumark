@@ -53,7 +53,8 @@ write something about why we did the things we did.
 % CARD is a superclass (generalization) of CREATURE, ARTIFACT, LAND, ENCHANTMENT, PLANESWALKER, SORCERY, INSTANT.
 % A CARD can be in multiple subcategories, i.e., “Artifact Land”, “Artifact Creature”, or ``Enchantment Creature''.
 % SETs contain CARDs.
-
+\\
+Note: Datatypes are SQLite datatypes of the following:  INTEGER, TEXT, BLOB, REAL, or NUMERIC.
 \section{Tables}
 % \subsection{FORMAT}
 % FORMATs have names that identify them.
@@ -69,13 +70,13 @@ write something about why we did the things we did.
         In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
     \end{quote}
 }
-\attribute{card\_name}{The name of the card.}{String}{Any valid card name.}
-\attribute{text}{Everything in the text area of the card.}{String}{Any valid card text.}
-\attribute{type}{The type of the card (creature, artifact, etc).}{String}{Any valid magic card type.}
-\attribute{supertype}{The super type of the card (legendary, snow, etc).}{String}{Any valid magic card supertype.}
-\attribute{power}{The card's power.}{Integer}{Any non-negative integer.}
-\attribute{toughness}{The card's toughness.}{Integer}{Any non-negative integer.}
-\attribute{loyalty}{The card's loyalty.}{Integer}{Any non-negative integer.}
+\attribute{card\_name}{The name of the card.}{TEXT}{Any valid card name.}
+\attribute{text}{Everything in the text area of the card.}{TEXT}{Any valid card text.}
+\attribute{type}{The type of the card (creature, artifact, etc).}{TEXT}{Any valid magic card type.}
+\attribute{supertype}{The super type of the card (legendary, snow, etc).}{TEXT}{Any valid magic card supertype.}
+\attribute{power}{The card's power.}{INTEGER}{Any non-negative integer.}
+\attribute{toughness}{The card's toughness.}{INTEGER}{Any non-negative integer.}
+\attribute{loyalty}{The card's loyalty.}{INTEGER}{Any non-negative integer.}
 
 \tablesection{SET}{
     The MTG wiki had the following to say about what a set is.
@@ -83,10 +84,10 @@ write something about why we did the things we did.
         A set in Magic: The Gathering is a pool of cards released together and designed for the same play environment. Cards in a set can be obtained either randomly through booster packs, or in box sets that have a fixed selection of cards. An expansion symbol and, more recently, a three-character abbreviation is printed on each card to identify the set it belongs to.
     \end{quote}
 }
-\attribute{set\_code}{The alphanumeric code associated with a set.}{String}{Combinations of letters and digits.}
-\attribute{set\_name}{The name of the set.}{String}{Any valid set name.}
-\attribute{year}{The year the set was released.}{Integer}{Any valid year.}
-\attribute{set\_type}{The type of set it is (Core, expansion, etc).}{String}{Any valid set type.}
+\attribute{set\_code}{The alphanumeric code associated with a set.}{TEXT}{Combinations of letters and digits.}
+\attribute{set\_name}{The name of the set.}{TEXT}{Any valid set name.}
+\attribute{year}{The year the set was released.}{INTEGER}{Any valid year.}
+\attribute{set\_type}{The type of set it is (Core, expansion, etc).}{TEXT}{Any valid set type.}
 
 \tablesection{FORMAT}{
     The MTG wiki had the following to say about what a format is.
@@ -94,24 +95,24 @@ write something about why we did the things we did.
         Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
     \end{quote}
 }
-\attribute{format\_name}{The name of the format.}{String}{Any valid format name.}
-\attribute{min\_deck\_size}{The minimum number of cards allowed in a deck.}{Integer}{Any non-negative integer.}
+\attribute{format\_name}{The name of the format.}{TEXT}{Any valid format name.}
+\attribute{min\_deck\_size}{The minimum number of cards allowed in a deck.}{INTEGER}{Any non-negative integer.}
 \attribute{max\_deck\_size}{The maximum number of cards allowed in a deck.}{Integer.}{Any integer, negative integers are interpreted as infinity.}
-\attribute{copies\_allowed}{The maximum number of copies of a card allowed in a deck.}{Integer}{Any non-negative integer.}
+\attribute{copies\_allowed}{The maximum number of copies of a card allowed in a deck.}{INTEGER}{Any non-negative integer.}
 
 \tablesection{IS\_ALLOWED}{description}
-\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
-\attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
+\attribute{set\_code}{A foreign key from SET.}{TEXT}{Combinations of letters and digits.}
+\attribute{format\_name}{A foreign key from FORMAT.}{TEXT}{Any valid format name.}
 
 \tablesection{CONTAINS}{description}
-\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
-\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
-\attribute{rarity}{The rarity of the card (common, uncommon, etc).}{String}{Any valid magic card rarity.}
+\attribute{set\_code}{A foreign key from SET.}{TEXT}{Combinations of letters and digits.}
+\attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
+\attribute{rarity}{The rarity of the card (common, uncommon, etc).}{TEXT}{Any valid magic card rarity.}
 
 \tablesection{LIMITATION}{description}
-\attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
-\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
-\attribute{limitation\_type}{The way in which a card is limited (banned, restricted, etc).}{String}{Any valid limitation.}
+\attribute{format\_name}{A foreign key from FORMAT.}{TEXT}{Any valid format name.}
+\attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
+\attribute{limitation\_type}{The way in which a card is limited (banned, restricted, etc).}{TEXT}{Any valid limitation.}
 
 \tablesection{COLOR}{
     MTG wiki had the following to say about color.
@@ -119,12 +120,12 @@ write something about why we did the things we did.
         Color is a basic property of cards in Magic: The Gathering, forming the core of the game's mana system and overall strategy.
     \end{quote}
 }
-\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
-\attribute{color}{The color a card is associated with, usually indicated by the physical color of the card.}{String}{Any valid magic card color.}
+\attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
+\attribute{color}{The color a card is associated with, usually indicated by the physical color of the card.}{TEXT}{Any valid magic card color.}
 
 \tablesection{COLOR\_COST}{description}
-\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
-\attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}
+\attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
+\attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{TEXT}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}
 \attribute{converted\_cost}{
     The sum over a cards mana cost.
     \begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
@@ -144,20 +145,20 @@ write something about why we did the things we did.
         \end{tabular}
     \end{table}
     Each occurrence of a character in a cost\_string is summed according to the above table.
-}{Integer}{Any non-negative integer.}
+}{INTEGER}{Any non-negative integer.}
 
 \tablesection{DOUBLE\_CARD}{description}
-\attribute{side\_a}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
-\attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
-\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
+\attribute{side\_a}{A foreign key from CARD, specifically a card\_name.}{TEXT}{Any valid card name.}
+\attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{TEXT}{Any valid card name.}
+\attribute{set\_code}{A foreign key from SET.}{TEXT}{Combinations of letters and digits.}
 
 
 \tablesection{SUBTYPE}{description}
-\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
-\attribute{subtype}{The subtype of the card (equipment, curse, etc).}{String}{Any valid magic card subtype.}
+\attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
+\attribute{subtype}{The subtype of the card (equipment, curse, etc).}{TEXT}{Any valid magic card subtype.}
 
 \tablesection{COLOR\_IDENTITY}{description}
-\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
 \attribute{red}{A flag to indicate the cards alignment with red.}{Boolean}{Any valid boolean.}
 \attribute{blue}{A flag to indicate the cards alignment with blue.}{Boolean}{Any valid boolean.}
 \attribute{green}{A flag to indicate the cards alignment with green.}{Boolean}{Any valid boolean.}
