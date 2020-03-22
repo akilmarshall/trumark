@@ -7,17 +7,18 @@ digraph {
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>FORMAT</i></td></tr>
         <tr><td port="1"><u>format_name</u></td></tr>
-        <tr><td port="2">deck_size</td></tr>
-        <tr><td port="3">num_players</td></tr>
+        <tr><td port="2">min_deck_size</td></tr>
+        <tr><td port="3">max_deck_size</td></tr>
         <tr><td port="4">copies_allowed</td></tr>
         </table>>];
 
     Set [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>SET</i></td></tr>
-        <tr><td port="1"><u><font color="black">set_num</font></u></td></tr>
-        <tr><td port="1"><font color="black">set_name</font></td></tr>
-        <tr><td port="2">year</td></tr>
+        <tr><td port="1"><u><font color="black">set_code</font></u></td></tr>
+        <tr><td port="2"><font color="black">set_name</font></td></tr>
+        <tr><td port="3">year</td></tr>
+        <tr><td port="4">set_type</td></tr>
         </table>>];
 
     Card [label=<
@@ -25,7 +26,6 @@ digraph {
         <tr><td><i>CARD</i></td></tr>
         <tr><td port="1"><u><font color="black">card_name</font></u></td></tr>
         <tr><td port="2">text</td></tr>
-        <tr><td port="3">converted_cost</td></tr>
         <tr><td port="4">type</td></tr>
         <tr><td port="5">supertype</td></tr>
         <tr><td port="6">power</td></tr>
@@ -36,7 +36,7 @@ digraph {
     Contains [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>CONTAINS</i></td></tr>
-        <tr><td port="1"><u>set_num</u></td></tr>
+        <tr><td port="1"><u>set_code</u></td></tr>
         <tr><td port="2"><u>card_name</u></td></tr>
         <tr><td port="3">rarity</td></tr>
         </table>>];
@@ -44,7 +44,7 @@ digraph {
     Is_allowed [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>IS_ALLOWED</i></td></tr>
-        <tr><td port="1"><u>set_num</u></td></tr>
+        <tr><td port="1"><u>set_code</u></td></tr>
         <tr><td port="2"><u>format_name</u></td></tr>
         </table>>];
 
@@ -53,7 +53,7 @@ digraph {
         <tr><td><i>DOUBLE_CARD</i></td></tr>
         <tr><td port="1"><u>side_a</u></td></tr>
         <tr><td port="2"><u>side_b</u></td></tr>
-        <tr><td port="3"><u>set_num</u></td></tr>
+        <tr><td port="3"><u>set_code</u></td></tr>
         </table>>];
 
     Limitation [label=< <table border="0" cellborder="1" cellspacing="0">
@@ -74,20 +74,19 @@ digraph {
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>COLOR_IDENTITY</i></td></tr>
         <tr><td port="1"><u>card_name</u></td></tr>
-        <tr><td port="2">color_id</td></tr>
-        <tr><td port="3">red</td></tr>
-        <tr><td port="4">blue</td></tr>
-        <tr><td port="5">green</td></tr>
-        <tr><td port="6">black</td></tr>
-        <tr><td port="7">white</td></tr>
-        <tr><td port="8">colorless</td></tr>
+        <tr><td port="2">red</td></tr>
+        <tr><td port="3">blue</td></tr>
+        <tr><td port="4">green</td></tr>
+        <tr><td port="5">black</td></tr>
+        <tr><td port="6">white</td></tr>
+        <tr><td port="7">colorless</td></tr>
         </table>>];
 
     Color_cost [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>COLOR_COST</i></td></tr>
         <tr><td port="1"><u>card_name</u></td></tr>
-        <tr><td port="2">cost</td></tr>
+        <tr><td port="2">cost_string</td></tr>
         <tr><td port="9">converted_cost</td></tr>
         </table>>];
 

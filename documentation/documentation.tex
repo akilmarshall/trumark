@@ -6,6 +6,7 @@
     linkcolor=black,
     urlcolor=blue,
 }
+\usepackage{dirtytalk}
 
 
 \newtheorem{theorem}{Theorem}%[section]
@@ -16,478 +17,599 @@
 \newtheorem*{remark}{Remark}
 \newtheorem*{definition}{Definition}
 
-\title{Magic: The Gathering Database Schema Overview}
+\newcommand{\tablesection}[2] {
+    \subsection{#1}  % name of the table
+    #2  % description of the table
+    \subsubsection{Attributes}
+}
+
+\newcommand{\attribute}[4] {
+    \begin{itemize}
+        \item {#1}  % attribute name
+            \begin{itemize}
+                \item \textbf{description}: #2  % description of the attribute 
+                \item \textbf{data type}: #3  % data type of the attribute
+                \item \textbf{domain}: #4  % domain of the attribute
+            \end{itemize}
+    \end{itemize}
+}
+
+\setcounter{tocdepth}{2}  % limit the depth of the table of contents
+
+\title{Magic: The Gathering Database Documentation}
 \author{John Kuroda\\Akil Marshall\\Israel Trusdell}
 \begin{document}
 \maketitle
+\newpage
 \tableofcontents
 \newpage
 \section{Philosophy of Design}
+write something about why we did the things we did.
 % A CARD is the primary object this database is designed around. A CARD may be printed in one or more SETs. A SET can be uniquely identified by it's set_name or it's set_num. 
-A CARD can be in more than one set.
-CARDs are identified by their name and the SET they are printed in.
-FORMATs have a list of allowed SETs.
-CARDs can be Restricted in a FORMAT (limited to 1 copy) or Banned in a FORMAT.
+% A CARD can be in more than one set.
+% CARDs are identified by their name and the SET they are printed in.
+% FORMATs have a list of allowed SETs.
+% CARDs can be Restricted in a FORMAT (limited to 1 copy) or Banned in a FORMAT.
 % CARD is a superclass (generalization) of CREATURE, ARTIFACT, LAND, ENCHANTMENT, PLANESWALKER, SORCERY, INSTANT.
 % A CARD can be in multiple subcategories, i.e., “Artifact Land”, “Artifact Creature”, or ``Enchantment Creature''.
-SETs contain CARDs.
+% SETs contain CARDs.
 
-\section{Entities}
-\subsection{FORMAT}
-FORMATs have names that identify them.
-A FORMAT is a game type with a set of rules and a list of allowed SETs.
-FORMATs also have a list of restricted cards and banned cards.  Entire sets are not necessarily illegal as a whole because cards in a set that is not allowed may show up in a set that is allowed.
-FORMATs have a predetermined deck size.
-FORMATs have a maximum number of players per game (can be $\infty$).
-\subsection{SET}
-A SET has a unique number, name, and the year it was released.
-\subsection{CARD}
-A CARD has a name but could be in multiple SETs so the SET name is used in conjunction to make a unique CARD identification.
-CARD cost is NA$\star$ where N $\in \mathbb{Z}_{\geq 0}$ and $A \in {B, U, R, G, W}$ for black, blue, red, green, white and $\star$ is zero or more.
-Converted cost is a calculated attribute and is the numerical count of the colorless cost plus color cost.
-Super type can be Legendary, Snow, or other super types.
-CARD text can may extra information about the card and its abilities.
-A card is associated with a color, (including colorless) but may not have a casting cost (e.g. Swamp).
-\subsection{COLOR}
-Each CARD is associated with one ore more colors (indicated by the CARDS physical color).
-\subsection{COLOR\_COST}
-Each CARD has some cost associated with it. A cost is a string over the alphabet $\{W, U, B, R, G, C, \#\}$
-\begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
-    \centering
-    \caption{Official mana text abbreviations}
-    \label{tab:cost_table}
-    \begin{tabular}{cc}
-        Color & Letter \\
-        \hline
-        Colorless & \# \\
-        White & B \\
-        Blue & U \\
-        Black & B \\
-        Red & R \\
-        Green & G \\
-        Optional & X \\
-        \hline
-    \end{tabular}
-\end{table}
-(\# represents any integer greater than 0, $ \mathbb{Z}_{>0}$)
+\section{Tables}
+% \subsection{FORMAT}
+% FORMATs have names that identify them.
+% A FORMAT is a game type with a set of rules and a list of allowed SETs.
+% FORMATs also have a list of restricted cards and banned cards.  Entire sets are not necessarily illegal as a whole because cards in a set that is not allowed may show up in a set that is allowed.
+% FORMATs have a predetermined deck size.
+% FORMATs have a maximum number of players per game (can be $\infty$).
+% \subsection{SET}
+% A SET has a unique number, name, and the year it was released.
+\tablesection{CARD}{
+    The MTG wiki had the following to say about what a card is.
+    \begin{quote}
+        In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
+    \end{quote}
+}
+\attribute{card\_name}{The name of the card.}{String}{Any valid card name.}
+\attribute{text}{Everything in the text area of the card.}{String}{Any valid card text.}
+\attribute{type}{The type of the card (creature, artifact, etc).}{String}{Any valid magic card type.}
+\attribute{supertype}{The super type of the card (legendary, snow, etc).}{String}{Any valid magic card supertype.}
+\attribute{power}{The card's power.}{Integer}{Any non-negative integer.}
+\attribute{toughness}{The card's toughness.}{Integer}{Any non-negative integer.}
+\attribute{loyalty}{The card's loyalty.}{Integer}{Any non-negative integer.}
 
-A valid cost string must begin with the colorless cost if it is greater than 0. For example \href{https://scryfall.com/card/pbfz/209s/bring-to-light}{\underline{Bring to Light}} is properly described with the cost string ``3WU'' or ``3UW'' but not by ``WU3''. The ordering of the letters mana letters following the number does not matter.
+\tablesection{SET}{
+    The MTG wiki had the following to say about what a set is.
+    \begin{quote}
+        A set in Magic: The Gathering is a pool of cards released together and designed for the same play environment. Cards in a set can be obtained either randomly through booster packs, or in box sets that have a fixed selection of cards. An expansion symbol and, more recently, a three-character abbreviation is printed on each card to identify the set it belongs to.
+    \end{quote}
+}
+\attribute{set\_code}{The alphanumeric code associated with a set.}{String}{Combinations of letters and digits.}
+\attribute{set\_name}{The name of the set.}{String}{Any valid set name.}
+\attribute{year}{The year the set was released.}{Integer}{Any valid year.}
+\attribute{set\_type}{The type of set it is (Core, expansion, etc).}{String}{Any valid set type.}
 
-Each CARD also has a converted\_cost which is the over it's colored/colorless costs, i.e., Bring to Light has a converted cost of 5. 
+\tablesection{FORMAT}{
+    The MTG wiki had the following to say about what a format is.
+    \begin{quote}
+        Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
+    \end{quote}
+}
+\attribute{format\_name}{The name of the format.}{String}{Any valid format name.}
+\attribute{min\_deck\_size}{The minimum number of cards allowed in a deck.}{Integer}{Any non-negative integer.}
+\attribute{max\_deck\_size}{The maximum number of cards allowed in a deck.}{Integer.}{Any integer, negative integers are interpreted as infinity.}
+\attribute{copies\_allowed}{The maximum number of copies of a card allowed in a deck.}{Integer}{Any non-negative integer.}
 
-Finally each CARD may be associated with one more costs (multi cost cards) [link NEEDED]
-\subsection{COLOR\_IDENTITY}
-Each mana symbol that appears on a CARD is included within that CARDs color identity. Each CARD is associated with one or more colors.
-\subsubsection{Type: Creature}
-% All CREATUREs inherit from CARD.
-A CREATURE has the attributes of power and toughness. %(in addition to inherited attributes).
-A CREATURE can have subtypes, e.g., Merfolk or Slivers.
-\subsubsection{Type: Planeswalker}
-% All PLANESWALKERs inherit from CARD.
-PLANESWALKERs have subtype, e.g., Ajani or Angrath.
-PLANESWALKERs have the unique attribute of Loyalty.
-\subsubsection{Type: Land}
-All LANDs inherit from CARD.
-Color identity can be one or more of the five colors (RUBWG) or colorless, e.g.  Mountains would be associated with R.
-LANDs have a subtype, e.g. Gate or “Swamp Mountain” (Badlands, a true dual land).
-LANDs may be basic or non-basic, each has a set of subtypes associated with it.
-\section{Relationships}
-\subsection{CONTAINS}
-SETs must Contain CARDs.
-CARDs must be a part of some SET, and could be in more that one.
-\subsection{DOUBLE\_CARD}
-\subsection{IS\_ALLOWED}
-One or more SETs can be allowed in gameplay in one or more FORMATs.
-\subsection{LIMITATION}
-A FORMAT can limit the CARDs used by restricting them, banning them, or deeming them illegal to use.
-Restricted means only one copy of any nonbasic land CARD allowed in a deck.
-A banned CARD is where the CARD is contained in an allowed SET, but is not allowed in gameplay.
-An illegal CARD is one that is not allowed for other reasons such as being in a SET that is not allowed in the FORMAT.
-\subsection{SUBTYPE}
-\section{Lists of Type Instances}
-\subsection{Supertype}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Basic
-        \item Host
-        \item Legendary
-        \item Snow
-        \item World
-    \end{itemize}
-\end{multicols}
-\subsection{Artifact}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Clue
-        \item Contraption
-        \item Equipment
-        \item Food
-        \item Fortification
-        \item Gold
-        \item Key
-        \item Treasure
-        \item Vehicle
-    \end{itemize}
-\end{multicols}
-\subsection{Creature}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Advisor
-        \item Aetherborn
-        \item Ally
-        \item Angel
-        \item Antelope
-        \item Ape
-        \item Archer
-        \item Archon
-        \item Army
-        \item Artificer
-        \item Assassin
-        \item Assembly-Worker
-        \item Atog
-        \item Aurochs
-        \item Avatar
-        \item Azra
-        \item Badger
-        \item Barbarian
-        \item Basilisk
-        \item Bat
-        \item Bear
-        \item Beast
-        \item Beeble
-        \item Berserker
-        \item Bird
-        \item Blinkmoth
-        \item Boar
-        \item Bringer
-        \item Brushwagg
-        \item Camarid
-        \item Camel
-        \item Caribou
-        \item Carrier
-        \item Cat
-        \item Centaur
-        \item Cephalid
-        \item Chimera
-        \item Citizen
-        \item Cleric
-        \item Cockatrice
-        \item Construct
-        \item Coward
-        \item Crab
-        \item Crocodile
-        \item Cyclops
-        \item Dauthi
-        \item Demigod
-        \item Demon
-        \item Deserter
-        \item Devil
-        \item Dinosaur
-        \item Djinn
-        \item Dragon
-        \item Drake
-        \item Dreadnought
-        \item Drone
-        \item Druid
-        \item Dryad
-        \item Dwarf
-        \item Efreet
-        \item Egg
-        \item Elder
-        \item Eldrazi
-        \item Elemental
-        \item Elephant
-        \item Elf
-        \item Elk
-        \item Eye
-        \item Faerie
-        \item Ferret
-        \item Fish
-        \item Flagbearer
-        \item Fox
-        \item Frog
-        \item Fungus
-        \item Gargoyle
-        \item Germ
-        \item Giant
-        \item Gnome
-        \item Goat
-        \item Goblin
-        \item God
-        \item Golem
-        \item Gorgon
-        \item Graveborn
-        \item Gremlin
-        \item Griffin
-        \item Hag
-        \item Harpy
-        \item Hellion
-        \item Hippo
-        \item Hippogriff
-        \item Homarid
-        \item Homunculus
-        \item Horror
-        \item Horse
-        \item Hound
-        \item Human
-        \item Hydra
-        \item Hyena
-        \item Illusion
-        \item Imp
-        \item Incarnation
-        \item Insect
-        \item Jackal
-        \item Jellyfish
-        \item Juggernaut
-        \item Kavu
-        \item Kirin
-        \item Kithkin
-        \item Knight
-        \item Kobold
-        \item Kor
-        \item Kraken
-        \item Lamia
-        \item Lammasu
-        \item Leech
-        \item Leviathan
-        \item Lhurgoyf
-        \item Licid
-        \item Lizard
-        \item Manticore
-        \item Masticore
-        \item Mercenary
-        \item Merfolk
-        \item Metathran
-        \item Minion
-        \item Minotaur
-        \item Mole
-        \item Monger
-        \item Mongoose
-        \item Monk
-        \item Monkey
-        \item Moonfolk
-        \item Mouse
-        \item Mutant
-        \item Myr
-        \item Mystic
-        \item Naga
-        \item Nautilus
-        \item Nephilim
-        \item Nightmare
-        \item Nightstalker
-        \item Ninja
-        \item Noble
-        \item Noggle
-        \item Nomad
-        \item Nymph
-        \item Octopus
-        \item Ogre
-        \item Ooze
-        \item Orb
-        \item Orc
-        \item Orgg
-        \item Ouphe
-        \item Ox
-        \item Oyster
-        \item Pangolin
-        \item Peasant
-        \item Pegasus
-        \item Pentavite
-        \item Pest
-        \item Phelddagrif
-        \item Phoenix
-        \item Pilot
-        \item Pincher
-        \item Pirate
-        \item Plant
-        \item Praetor
-        \item Prism
-        \item Processor
-        \item Rabbit
-        \item Rat
-        \item Rebel
-        \item Reflection
-        \item Rhino
-        \item Rigger
-        \item Rogue
-        \item Sable
-        \item Salamander
-        \item Samurai
-        \item Sand
-        \item Saproling
-        \item Satyr
-        \item Scarecrow
-        \item Scion
-        \item Scorpion
-        \item Scout
-        \item Sculpture
-        \item Serf
-        \item Serpent
-        \item Servo
-        \item Shade
-        \item Shaman
-        \item Shapeshifter
-        \item Sheep
-        \item Siren
-        \item Skeleton
-        \item Slith
-        \item Sliver
-        \item Slug
-        \item Snake
-        \item Soldier
-        \item Soltari
-        \item Spawn
-        \item Specter
-        \item Spellshaper
-        \item Sphinx
-        \item Spider
-        \item Spike
-        \item Spirit
-        \item Splinter
-        \item Sponge
-        \item Squid
-        \item Squirrel
-        \item Starfish
-        \item Surrakar
-        \item Survivor
-        \item Tentacle
-        \item Tetravite
-        \item Thalakos
-        \item Thopter
-        \item Thrull
-        \item Treefolk
-        \item Trilobite
-        \item Triskelavite
-        \item Troll
-        \item Turtle
-        \item Unicorn
-        \item Vampire
-        \item Vedalken
-        \item Viashino
-        \item Volver
-        \item Wall
-        \item Warlock
-        \item Warrior
-        \item Weird
-        \item Werewolf
-        \item Whale
-        \item Wizard
-        \item Wolf
-        \item Wolverine
-        \item Wombat
-        \item Worm
-        \item Wraith
-        \item Wurm
-        \item Yeti
-        \item Zombie
-        \item Zubera
-    \end{itemize}
-\end{multicols}
-\subsection{Enchantment}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Aura
-        \item Carouche
-        \item Curse
-        \item Saga
-        \item Shrine
-    \end{itemize}
-\end{multicols}
-\subsection{Land}
-\subsubsection{Basic}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Plains
-        \item Island
-        \item Swamp
-        \item Mountain
-        \item Forest
-    \end{itemize}
-\end{multicols}
-\subsubsection{Non-Basic}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Desert
-        \item Gate
-        \item Lair
-        \item Locus
-        \item Urza's
-        \item Mine
-        \item Power-Plant
-        \item Tower
-    \end{itemize}
-\end{multicols}
-\subsection{Planeswalker}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Ajani
-        \item Aminatou
-        \item Angrath
-        \item Arlinn
-        \item Ashiok
-        \item Bolas
-        \item Chandra
-        \item Dack
-        \item Daretti
-        \item Davriel
-        \item Domri
-        \item Dovin
-        \item Elspeth
-        \item Estrid
-        \item Freyalise
-        \item Garruk
-        \item Gideon
-        \item Huatli
-        \item Jace
-        \item Jaya
-        \item Karn
-        \item Kasmina
-        \item Kaya
-        \item Kiora
-        \item Koth
-        \item Liliana
-        \item Nahiri
-        \item Narset
-        \item Nissa
-        \item Nixilis
-        \item Oko
-        \item Ral
-        \item Rowan
-        \item Saheeli
-        \item Samut
-        \item Sarkhan
-        \item Serra
-        \item Sorin
-        \item Tamiyo
-        \item Teferi
-        \item Teyo
-        \item Tezzeret
-        \item Tibalt
-        \item Ugin
-        \item Venser
-        \item Vivien
-        \item Vraska
-        \item Will
-        \item Windgrace
-        \item Wrenn
-        \item Xenagos
-        \item Yanggu
-        \item Yanling
-    \end{itemize}
-\end{multicols}
-\subsection{Instant}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Adventure
-        \item Arcane
-        \item Trap
-    \end{itemize}
-\end{multicols}
-\subsection{Sorcery}
-\begin{multicols}{3}
-    \begin{itemize}
-        \item Adventure
-        \item Arcane
-    \end{itemize}
-\end{multicols}
+\tablesection{IS\_ALLOWED}{description}
+\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
+\attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
+
+\tablesection{CONTAINS}{description}
+\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{rarity}{The rarity of the card (common, uncommon, etc).}{String}{Any valid magic card rarity.}
+
+\tablesection{LIMITATION}{description}
+\attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{limitation\_type}{The way in which a card is limited (banned, restricted, etc).}{String}{Any valid limitation.}
+
+\tablesection{COLOR}{
+    MTG wiki had the following to say about color.
+    \begin{quote}
+        Color is a basic property of cards in Magic: The Gathering, forming the core of the game's mana system and overall strategy.
+    \end{quote}
+}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{color}{The color a card is associated with, usually indicated by the physical color of the card.}{String}{Any valid magic card color.}
+
+\tablesection{COLOR\_COST}{description}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}
+\attribute{converted\_cost}{
+    The sum over a cards mana cost.
+    \begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
+        \centering
+        \caption{How to sum a cost\_string.}
+        \label{tab:convertedcost}
+        \begin{tabular}{cc}
+            $\sum$ & value \\
+            \hline
+            $R$ & 1 \\
+            $U$ & 1 \\
+            $G$ & 1 \\
+            $B$ & 1 \\
+            $W$ & 1 \\
+            $X$ & 0 \\
+            $\phi$ & $\phi$ \\
+        \end{tabular}
+    \end{table}
+    Each occurrence of a character in a cost\_string is summed according to the above table.
+}{Integer}{Any non-negative integer.}
+
+\tablesection{DOUBLE\_CARD}{description}
+\attribute{side\_a}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
+\attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
+\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
+
+
+\tablesection{SUBTYPE}{description}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{subtype}{The subtype of the card (equipment, curse, etc).}{String}{Any valid magic card subtype.}
+
+\tablesection{COLOR\_IDENTITY}{description}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{red}{A flag to indicate the cards alignment with red.}{Boolean}{Any valid boolean.}
+\attribute{blue}{A flag to indicate the cards alignment with blue.}{Boolean}{Any valid boolean.}
+\attribute{green}{A flag to indicate the cards alignment with green.}{Boolean}{Any valid boolean.}
+\attribute{white}{A flag to indicate the cards alignment with white.}{Boolean}{Any valid boolean.}
+\attribute{black}{A flag to indicate the cards alignment with black.}{Boolean}{Any valid boolean.}
+\attribute{colorless}{A flag to indicate the cards alignment with colorless.}{Boolean}{Any valid boolean.}
+% A CARD has a name but could be in multiple SETs so the SET name is used in conjunction to make a unique CARD identification.
+% CARD cost is NA$\star$ where N $\in \mathbb{Z}_{\geq 0}$ and $A \in {B, U, R, G, W}$ for black, blue, red, green, white and $\star$ is zero or more.
+% Converted cost is a calculated attribute and is the numerical count of the colorless cost plus color cost.
+% Super type can be Legendary, Snow, or other super types.
+% CARD text can may extra information about the card and its abilities.
+% A card is associated with a color, (including colorless) but may not have a casting cost (e.g. Swamp).
+% \subsection{COLOR}
+% Each CARD is associated with one ore more colors (indicated by the CARDS physical color).
+% \subsection{COLOR\_COST}
+% Each CARD has some cost associated with it. A cost is a string over the alphabet $\{W, U, B, R, G, C, \#\}$
+% \begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
+%     \centering
+%     \caption{Official mana text abbreviations}
+%     \label{tab:cost_table}
+%     \begin{tabular}{cc}
+%         Color & Letter \\
+%         \hline
+%         Colorless & \# \\
+%         White & B \\
+%         Blue & U \\
+%         Black & B \\
+%         Red & R \\
+%         Green & G \\
+%         Optional & X \\
+%         \hline
+%     \end{tabular}
+% \end{table}
+% (\# represents any integer greater than 0, $ \mathbb{Z}_{>0}$)
+
+% A valid cost string must begin with the colorless cost if it is greater than 0. For example \href{https://scryfall.com/card/pbfz/209s/bring-to-light}{\underline{Bring to Light}} is properly described with the cost string ``3WU'' or ``3UW'' but not by ``WU3''. The ordering of the letters mana letters following the number does not matter.
+
+% Each CARD also has a converted\_cost which is the over it's colored/colorless costs, i.e., Bring to Light has a converted cost of 5. 
+
+% Finally each CARD may be associated with one more costs (multi cost cards) [link NEEDED]
+% \subsection{COLOR\_IDENTITY}
+% Each mana symbol that appears on a CARD is included within that CARDs color identity. Each CARD is associated with one or more colors.
+% \subsubsection{Type: Creature}
+% % All CREATUREs inherit from CARD.
+% A CREATURE has the attributes of power and toughness. %(in addition to inherited attributes).
+% A CREATURE can have subtypes, e.g., Merfolk or Slivers.
+% \subsubsection{Type: Planeswalker}
+% % All PLANESWALKERs inherit from CARD.
+% PLANESWALKERs have subtype, e.g., Ajani or Angrath.
+% PLANESWALKERs have the unique attribute of Loyalty.
+% \subsubsection{Type: Land}
+% All LANDs inherit from CARD.
+% Color identity can be one or more of the five colors (RUBWG) or colorless, e.g.  Mountains would be associated with R.
+% LANDs have a subtype, e.g. Gate or “Swamp Mountain” (Badlands, a true dual land).
+% LANDs may be basic or non-basic, each has a set of subtypes associated with it.
+% \section{Relationships}
+% \subsection{CONTAINS}
+% SETs must Contain CARDs.
+% CARDs must be a part of some SET, and could be in more that one.
+% \subsection{DOUBLE\_CARD}
+% \subsection{IS\_ALLOWED}
+% One or more SETs can be allowed in gameplay in one or more FORMATs.
+% \subsection{LIMITATION}
+% A FORMAT can limit the CARDs used by restricting them, banning them, or deeming them illegal to use.
+% Restricted means only one copy of any nonbasic land CARD allowed in a deck.
+% A banned CARD is where the CARD is contained in an allowed SET, but is not allowed in gameplay.
+% An illegal CARD is one that is not allowed for other reasons such as being in a SET that is not allowed in the FORMAT.
+% \subsection{SUBTYPE}
+% \section{Lists of Type Instances}
+% \subsection{Supertype}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Basic
+%         \item Host
+%         \item Legendary
+%         \item Snow
+%         \item World
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Artifact}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Clue
+%         \item Contraption
+%         \item Equipment
+%         \item Food
+%         \item Fortification
+%         \item Gold
+%         \item Key
+%         \item Treasure
+%         \item Vehicle
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Creature}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Advisor
+%         \item Aetherborn
+%         \item Ally
+%         \item Angel
+%         \item Antelope
+%         \item Ape
+%         \item Archer
+%         \item Archon
+%         \item Army
+%         \item Artificer
+%         \item Assassin
+%         \item Assembly-Worker
+%         \item Atog
+%         \item Aurochs
+%         \item Avatar
+%         \item Azra
+%         \item Badger
+%         \item Barbarian
+%         \item Basilisk
+%         \item Bat
+%         \item Bear
+%         \item Beast
+%         \item Beeble
+%         \item Berserker
+%         \item Bird
+%         \item Blinkmoth
+%         \item Boar
+%         \item Bringer
+%         \item Brushwagg
+%         \item Camarid
+%         \item Camel
+%         \item Caribou
+%         \item Carrier
+%         \item Cat
+%         \item Centaur
+%         \item Cephalid
+%         \item Chimera
+%         \item Citizen
+%         \item Cleric
+%         \item Cockatrice
+%         \item Construct
+%         \item Coward
+%         \item Crab
+%         \item Crocodile
+%         \item Cyclops
+%         \item Dauthi
+%         \item Demigod
+%         \item Demon
+%         \item Deserter
+%         \item Devil
+%         \item Dinosaur
+%         \item Djinn
+%         \item Dragon
+%         \item Drake
+%         \item Dreadnought
+%         \item Drone
+%         \item Druid
+%         \item Dryad
+%         \item Dwarf
+%         \item Efreet
+%         \item Egg
+%         \item Elder
+%         \item Eldrazi
+%         \item Elemental
+%         \item Elephant
+%         \item Elf
+%         \item Elk
+%         \item Eye
+%         \item Faerie
+%         \item Ferret
+%         \item Fish
+%         \item Flagbearer
+%         \item Fox
+%         \item Frog
+%         \item Fungus
+%         \item Gargoyle
+%         \item Germ
+%         \item Giant
+%         \item Gnome
+%         \item Goat
+%         \item Goblin
+%         \item God
+%         \item Golem
+%         \item Gorgon
+%         \item Graveborn
+%         \item Gremlin
+%         \item Griffin
+%         \item Hag
+%         \item Harpy
+%         \item Hellion
+%         \item Hippo
+%         \item Hippogriff
+%         \item Homarid
+%         \item Homunculus
+%         \item Horror
+%         \item Horse
+%         \item Hound
+%         \item Human
+%         \item Hydra
+%         \item Hyena
+%         \item Illusion
+%         \item Imp
+%         \item Incarnation
+%         \item Insect
+%         \item Jackal
+%         \item Jellyfish
+%         \item Juggernaut
+%         \item Kavu
+%         \item Kirin
+%         \item Kithkin
+%         \item Knight
+%         \item Kobold
+%         \item Kor
+%         \item Kraken
+%         \item Lamia
+%         \item Lammasu
+%         \item Leech
+%         \item Leviathan
+%         \item Lhurgoyf
+%         \item Licid
+%         \item Lizard
+%         \item Manticore
+%         \item Masticore
+%         \item Mercenary
+%         \item Merfolk
+%         \item Metathran
+%         \item Minion
+%         \item Minotaur
+%         \item Mole
+%         \item Monger
+%         \item Mongoose
+%         \item Monk
+%         \item Monkey
+%         \item Moonfolk
+%         \item Mouse
+%         \item Mutant
+%         \item Myr
+%         \item Mystic
+%         \item Naga
+%         \item Nautilus
+%         \item Nephilim
+%         \item Nightmare
+%         \item Nightstalker
+%         \item Ninja
+%         \item Noble
+%         \item Noggle
+%         \item Nomad
+%         \item Nymph
+%         \item Octopus
+%         \item Ogre
+%         \item Ooze
+%         \item Orb
+%         \item Orc
+%         \item Orgg
+%         \item Ouphe
+%         \item Ox
+%         \item Oyster
+%         \item Pangolin
+%         \item Peasant
+%         \item Pegasus
+%         \item Pentavite
+%         \item Pest
+%         \item Phelddagrif
+%         \item Phoenix
+%         \item Pilot
+%         \item Pincher
+%         \item Pirate
+%         \item Plant
+%         \item Praetor
+%         \item Prism
+%         \item Processor
+%         \item Rabbit
+%         \item Rat
+%         \item Rebel
+%         \item Reflection
+%         \item Rhino
+%         \item Rigger
+%         \item Rogue
+%         \item Sable
+%         \item Salamander
+%         \item Samurai
+%         \item Sand
+%         \item Saproling
+%         \item Satyr
+%         \item Scarecrow
+%         \item Scion
+%         \item Scorpion
+%         \item Scout
+%         \item Sculpture
+%         \item Serf
+%         \item Serpent
+%         \item Servo
+%         \item Shade
+%         \item Shaman
+%         \item Shapeshifter
+%         \item Sheep
+%         \item Siren
+%         \item Skeleton
+%         \item Slith
+%         \item Sliver
+%         \item Slug
+%         \item Snake
+%         \item Soldier
+%         \item Soltari
+%         \item Spawn
+%         \item Specter
+%         \item Spellshaper
+%         \item Sphinx
+%         \item Spider
+%         \item Spike
+%         \item Spirit
+%         \item Splinter
+%         \item Sponge
+%         \item Squid
+%         \item Squirrel
+%         \item Starfish
+%         \item Surrakar
+%         \item Survivor
+%         \item Tentacle
+%         \item Tetravite
+%         \item Thalakos
+%         \item Thopter
+%         \item Thrull
+%         \item Treefolk
+%         \item Trilobite
+%         \item Triskelavite
+%         \item Troll
+%         \item Turtle
+%         \item Unicorn
+%         \item Vampire
+%         \item Vedalken
+%         \item Viashino
+%         \item Volver
+%         \item Wall
+%         \item Warlock
+%         \item Warrior
+%         \item Weird
+%         \item Werewolf
+%         \item Whale
+%         \item Wizard
+%         \item Wolf
+%         \item Wolverine
+%         \item Wombat
+%         \item Worm
+%         \item Wraith
+%         \item Wurm
+%         \item Yeti
+%         \item Zombie
+%         \item Zubera
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Enchantment}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Aura
+%         \item Carouche
+%         \item Curse
+%         \item Saga
+%         \item Shrine
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Land}
+% \subsubsection{Basic}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Plains
+%         \item Island
+%         \item Swamp
+%         \item Mountain
+%         \item Forest
+%     \end{itemize}
+% \end{multicols}
+% \subsubsection{Non-Basic}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Desert
+%         \item Gate
+%         \item Lair
+%         \item Locus
+%         \item Urza's
+%         \item Mine
+%         \item Power-Plant
+%         \item Tower
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Planeswalker}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Ajani
+%         \item Aminatou
+%         \item Angrath
+%         \item Arlinn
+%         \item Ashiok
+%         \item Bolas
+%         \item Chandra
+%         \item Dack
+%         \item Daretti
+%         \item Davriel
+%         \item Domri
+%         \item Dovin
+%         \item Elspeth
+%         \item Estrid
+%         \item Freyalise
+%         \item Garruk
+%         \item Gideon
+%         \item Huatli
+%         \item Jace
+%         \item Jaya
+%         \item Karn
+%         \item Kasmina
+%         \item Kaya
+%         \item Kiora
+%         \item Koth
+%         \item Liliana
+%         \item Nahiri
+%         \item Narset
+%         \item Nissa
+%         \item Nixilis
+%         \item Oko
+%         \item Ral
+%         \item Rowan
+%         \item Saheeli
+%         \item Samut
+%         \item Sarkhan
+%         \item Serra
+%         \item Sorin
+%         \item Tamiyo
+%         \item Teferi
+%         \item Teyo
+%         \item Tezzeret
+%         \item Tibalt
+%         \item Ugin
+%         \item Venser
+%         \item Vivien
+%         \item Vraska
+%         \item Will
+%         \item Windgrace
+%         \item Wrenn
+%         \item Xenagos
+%         \item Yanggu
+%         \item Yanling
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Instant}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Adventure
+%         \item Arcane
+%         \item Trap
+%     \end{itemize}
+% \end{multicols}
+% \subsection{Sorcery}
+% \begin{multicols}{3}
+%     \begin{itemize}
+%         \item Adventure
+%         \item Arcane
+%     \end{itemize}
+% \end{multicols}
 \end{document}
