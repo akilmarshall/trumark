@@ -72,7 +72,6 @@ write something about why we did the things we did.
 \attribute{card\_name}{The name of the card.}{String}{Any valid card name.}
 \attribute{text}{Everything in the text area of the card.}{String}{Any valid card text.}
 \attribute{type}{The type of the card (creature, artifact, etc).}{String}{Any valid magic card type.}
-\attribute{supertype}{The super type of the card (legendary, snow, etc).}{String}{Any valid magic card supertype.}
 \attribute{power}{The card's power.}{Integer}{Any non-negative integer.}
 \attribute{toughness}{The card's toughness.}{Integer}{Any non-negative integer.}
 \attribute{loyalty}{The card's loyalty.}{Integer}{Any non-negative integer.}
@@ -87,7 +86,7 @@ write something about why we did the things we did.
 \attribute{set\_code}{The alphanumeric code associated with a set.}{String}{Combinations of letters and digits.}
 \attribute{set\_name}{The name of the set.}{String}{Any valid set name.}
 \attribute{year}{The year the set was released.}{Integer}{Any valid year.}
-\attribute{set\_type}{The type of set it is (Core, expansion, etc).}{String}{Any valid set type.}
+\attribute{set\_type}{The type of set it is (core, expansion, etc).}{String}{Any valid set type.}
 
 \tablesection{FORMAT}{
     The MTG wiki had the following to say about what a format is.
@@ -162,6 +161,12 @@ write something about why we did the things we did.
 \attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
 \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
 
+
+\tablesection{SUPERTYPE}{
+    Magic cards may have one or more supertypes, this table implements that one-to-many relationship.
+}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{supertype}{The supertype of the card (legendary, snow, etc).}{String}{Any valid magic card subtype.}
 
 \tablesection{SUBTYPE}{
     Magic cards may have zero or more subtypes, this table implements that one-to-many relationship.

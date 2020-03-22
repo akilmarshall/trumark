@@ -18,8 +18,10 @@
 \contentsline {subsubsection}{\numberline {2.8.1}Attributes}{8}{subsubsection.2.8.1}% 
 \contentsline {subsection}{\numberline {2.9}DOUBLE\_CARD}{8}{subsection.2.9}% 
 \contentsline {subsubsection}{\numberline {2.9.1}Attributes}{8}{subsubsection.2.9.1}% 
-\contentsline {subsection}{\numberline {2.10}SUBTYPE}{9}{subsection.2.10}% 
+\contentsline {subsection}{\numberline {2.10}SUPERTYPE}{9}{subsection.2.10}% 
 \contentsline {subsubsection}{\numberline {2.10.1}Attributes}{9}{subsubsection.2.10.1}% 
-\contentsline {subsection}{\numberline {2.11}COLOR\_IDENTITY}{9}{subsection.2.11}% 
+\contentsline {subsection}{\numberline {2.11}SUBTYPE}{9}{subsection.2.11}% 
 \contentsline {subsubsection}{\numberline {2.11.1}Attributes}{9}{subsubsection.2.11.1}% 
-\contentsline {section}{\numberline {3}Domain Descriptions of Certain Attributes}{10}{section.3}% 
+\contentsline {subsection}{\numberline {2.12}COLOR\_IDENTITY}{10}{subsection.2.12}% 
+\contentsline {subsubsection}{\numberline {2.12.1}Attributes}{10}{subsubsection.2.12.1}% 
+\contentsline {section}{\numberline {3}Domain Descriptions of Certain Attributes}{11}{section.3}% 

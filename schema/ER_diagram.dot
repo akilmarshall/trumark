@@ -70,6 +70,13 @@ digraph {
         <tr><td port="2">subtype</td></tr>
         </table>>];
 
+    Supertype [label=<
+        <table border="0" cellborder="1" cellspacing="0">
+        <tr><td><i>SUPERTYPE</i></td></tr>
+        <tr><td port="1"><u>card_name</u></td></tr>
+        <tr><td port="2">supertype</td></tr>
+        </table>>];
+
     Color_identity [label=<
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>COLOR_IDENTITY</i></td></tr>
@@ -86,7 +93,7 @@ digraph {
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>COLOR_COST</i></td></tr>
         <tr><td port="1"><u>card_name</u></td></tr>
-        <tr><td port="2">cost_string</td></tr>
+        <tr><td port="2"><u>cost_string</u></td></tr>
         <tr><td port="9">converted_cost</td></tr>
         </table>>];
 
@@ -118,6 +125,8 @@ digraph {
 
 
     Card:1 -> Subtype:1 ;
+
+    Card:1 -> Supertype:1 ;
 
     Card:1 -> Color_identity:1;
 }

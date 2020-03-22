@@ -83,7 +83,7 @@ class Color_cost(Base):
     __tablename__ = 'COLOR_COST'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    cost_string = Column(String)
+    cost_string = Column(String, primary_key=True)
 
     Card = relationship('Card', backref='Color_cost')
 
@@ -107,6 +107,15 @@ class Subtype(Base):
     subtype = Column(String, nullable=False)
 
     Card = relationship('Card', backref='Subtype')
+
+
+class Supertype(Base):
+    __tablename__ = 'SUPERTYPE'
+
+    card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
+    supertype = Column(String, nullable=False)
+
+    Card = relationship('Card', backref='Supertype')
 
 
 class Color_identity(Base):
