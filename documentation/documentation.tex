@@ -6,8 +6,6 @@
     linkcolor=black,
     urlcolor=blue,
 }
-\usepackage{dirtytalk}
-
 
 \newtheorem{theorem}{Theorem}%[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -68,6 +66,8 @@ write something about why we did the things we did.
     \begin{quote}
         In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
     \end{quote}
+
+    The CARD table is reflective of the elements you will find on a magic card.
 }
 \attribute{card\_name}{The name of the card.}{String}{Any valid card name.}
 \attribute{text}{Everything in the text area of the card.}{String}{Any valid card text.}
@@ -82,6 +82,7 @@ write something about why we did the things we did.
     \begin{quote}
         A set in Magic: The Gathering is a pool of cards released together and designed for the same play environment. Cards in a set can be obtained either randomly through booster packs, or in box sets that have a fixed selection of cards. An expansion symbol and, more recently, a three-character abbreviation is printed on each card to identify the set it belongs to.
     \end{quote}
+
 }
 \attribute{set\_code}{The alphanumeric code associated with a set.}{String}{Combinations of letters and digits.}
 \attribute{set\_name}{The name of the set.}{String}{Any valid set name.}
@@ -99,16 +100,22 @@ write something about why we did the things we did.
 \attribute{max\_deck\_size}{The maximum number of cards allowed in a deck.}{Integer.}{Any integer, negative integers are interpreted as infinity.}
 \attribute{copies\_allowed}{The maximum number of copies of a card allowed in a deck.}{Integer}{Any non-negative integer.}
 
-\tablesection{IS\_ALLOWED}{description}
+\tablesection{IS\_ALLOWED}{
+    This table is the implementation of the many-to-many relationship between FORMAT and SET\@. A format may allow many sets and a set may be included in many formats.
+}
 \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
 \attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
 
-\tablesection{CONTAINS}{description}
+\tablesection{CONTAINS}{
+    This table is the implementation of the many-to-many relationship between CARD and SET. A card may be included in may sets and A set may contain many cards.
+}
 \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{rarity}{The rarity of the card (common, uncommon, etc).}{String}{Any valid magic card rarity.}
 
-\tablesection{LIMITATION}{description}
+\tablesection{LIMITATION}{
+    This table is the implementation of the many-to-many relationship between FORMAT and CARD. A format may limit many cards and a card may be limited by many formats.
+}
 \attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{limitation\_type}{The way in which a card is limited (banned, restricted, etc).}{String}{Any valid limitation.}
@@ -122,7 +129,9 @@ write something about why we did the things we did.
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{color}{The color a card is associated with, usually indicated by the physical color of the card.}{String}{Any valid magic card color.}
 
-\tablesection{COLOR\_COST}{description}
+\tablesection{COLOR\_COST}{
+    Due to the fact that converted\_cost depends on cost\_string which is not the primary key. This table solves that problem.
+}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}
 \attribute{converted\_cost}{
@@ -146,17 +155,24 @@ write something about why we did the things we did.
     Each occurrence of a character in a cost\_string is summed according to the above table.
 }{Integer}{Any non-negative integer.}
 
-\tablesection{DOUBLE\_CARD}{description}
+\tablesection{DOUBLE\_CARD}{
+    This table allows us to describe double faced cards which are magic cards with two faces.
+}
 \attribute{side\_a}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
 \attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
 \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
 
 
-\tablesection{SUBTYPE}{description}
+\tablesection{SUBTYPE}{
+    Magic cards may have zero or more subtypes, this table implements that one-to-many relationship.
+}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{subtype}{The subtype of the card (equipment, curse, etc).}{String}{Any valid magic card subtype.}
 
-\tablesection{COLOR\_IDENTITY}{description}
+\tablesection{COLOR\_IDENTITY}{
+    Each mana symbol that appears on a card is included within that cards color identity.
+    Each card is associated with one or more colors.
+}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{red}{A flag to indicate the cards alignment with red.}{Boolean}{Any valid boolean.}
 \attribute{blue}{A flag to indicate the cards alignment with blue.}{Boolean}{Any valid boolean.}
@@ -164,68 +180,9 @@ write something about why we did the things we did.
 \attribute{white}{A flag to indicate the cards alignment with white.}{Boolean}{Any valid boolean.}
 \attribute{black}{A flag to indicate the cards alignment with black.}{Boolean}{Any valid boolean.}
 \attribute{colorless}{A flag to indicate the cards alignment with colorless.}{Boolean}{Any valid boolean.}
-% A CARD has a name but could be in multiple SETs so the SET name is used in conjunction to make a unique CARD identification.
-% CARD cost is NA$\star$ where N $\in \mathbb{Z}_{\geq 0}$ and $A \in {B, U, R, G, W}$ for black, blue, red, green, white and $\star$ is zero or more.
-% Converted cost is a calculated attribute and is the numerical count of the colorless cost plus color cost.
-% Super type can be Legendary, Snow, or other super types.
-% CARD text can may extra information about the card and its abilities.
-% A card is associated with a color, (including colorless) but may not have a casting cost (e.g. Swamp).
-% \subsection{COLOR}
-% Each CARD is associated with one ore more colors (indicated by the CARDS physical color).
-% \subsection{COLOR\_COST}
-% Each CARD has some cost associated with it. A cost is a string over the alphabet $\{W, U, B, R, G, C, \#\}$
-% \begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
-%     \centering
-%     \caption{Official mana text abbreviations}
-%     \label{tab:cost_table}
-%     \begin{tabular}{cc}
-%         Color & Letter \\
-%         \hline
-%         Colorless & \# \\
-%         White & B \\
-%         Blue & U \\
-%         Black & B \\
-%         Red & R \\
-%         Green & G \\
-%         Optional & X \\
-%         \hline
-%     \end{tabular}
-% \end{table}
-% (\# represents any integer greater than 0, $ \mathbb{Z}_{>0}$)
 
-% A valid cost string must begin with the colorless cost if it is greater than 0. For example \href{https://scryfall.com/card/pbfz/209s/bring-to-light}{\underline{Bring to Light}} is properly described with the cost string ``3WU'' or ``3UW'' but not by ``WU3''. The ordering of the letters mana letters following the number does not matter.
-
-% Each CARD also has a converted\_cost which is the over it's colored/colorless costs, i.e., Bring to Light has a converted cost of 5. 
-
-% Finally each CARD may be associated with one more costs (multi cost cards) [link NEEDED]
-% \subsection{COLOR\_IDENTITY}
-% Each mana symbol that appears on a CARD is included within that CARDs color identity. Each CARD is associated with one or more colors.
-% \subsubsection{Type: Creature}
-% % All CREATUREs inherit from CARD.
-% A CREATURE has the attributes of power and toughness. %(in addition to inherited attributes).
-% A CREATURE can have subtypes, e.g., Merfolk or Slivers.
-% \subsubsection{Type: Planeswalker}
-% % All PLANESWALKERs inherit from CARD.
-% PLANESWALKERs have subtype, e.g., Ajani or Angrath.
-% PLANESWALKERs have the unique attribute of Loyalty.
-% \subsubsection{Type: Land}
-% All LANDs inherit from CARD.
-% Color identity can be one or more of the five colors (RUBWG) or colorless, e.g.  Mountains would be associated with R.
-% LANDs have a subtype, e.g. Gate or “Swamp Mountain” (Badlands, a true dual land).
-% LANDs may be basic or non-basic, each has a set of subtypes associated with it.
-% \section{Relationships}
-% \subsection{CONTAINS}
-% SETs must Contain CARDs.
-% CARDs must be a part of some SET, and could be in more that one.
-% \subsection{DOUBLE\_CARD}
-% \subsection{IS\_ALLOWED}
-% One or more SETs can be allowed in gameplay in one or more FORMATs.
-% \subsection{LIMITATION}
-% A FORMAT can limit the CARDs used by restricting them, banning them, or deeming them illegal to use.
-% Restricted means only one copy of any nonbasic land CARD allowed in a deck.
-% A banned CARD is where the CARD is contained in an allowed SET, but is not allowed in gameplay.
-% An illegal CARD is one that is not allowed for other reasons such as being in a SET that is not allowed in the FORMAT.
-% \subsection{SUBTYPE}
+\section{Domain Descriptions of Certain Attributes}
+In this section we describe in detail and give examples of the attributes domain for those attributes that we can reasonably do so.
 % \section{Lists of Type Instances}
 % \subsection{Supertype}
 % \begin{multicols}{3}

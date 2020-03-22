@@ -7,18 +7,19 @@
 \contentsline {subsection}{\numberline {2.3}FORMAT}{5}{subsection.2.3}% 
 \contentsline {subsubsection}{\numberline {2.3.1}Attributes}{5}{subsubsection.2.3.1}% 
 \contentsline {subsection}{\numberline {2.4}IS\_ALLOWED}{5}{subsection.2.4}% 
-\contentsline {subsubsection}{\numberline {2.4.1}Attributes}{5}{subsubsection.2.4.1}% 
+\contentsline {subsubsection}{\numberline {2.4.1}Attributes}{6}{subsubsection.2.4.1}% 
 \contentsline {subsection}{\numberline {2.5}CONTAINS}{6}{subsection.2.5}% 
 \contentsline {subsubsection}{\numberline {2.5.1}Attributes}{6}{subsubsection.2.5.1}% 
 \contentsline {subsection}{\numberline {2.6}LIMITATION}{6}{subsection.2.6}% 
-\contentsline {subsubsection}{\numberline {2.6.1}Attributes}{6}{subsubsection.2.6.1}% 
+\contentsline {subsubsection}{\numberline {2.6.1}Attributes}{7}{subsubsection.2.6.1}% 
 \contentsline {subsection}{\numberline {2.7}COLOR}{7}{subsection.2.7}% 
 \contentsline {subsubsection}{\numberline {2.7.1}Attributes}{7}{subsubsection.2.7.1}% 
 \contentsline {subsection}{\numberline {2.8}COLOR\_COST}{7}{subsection.2.8}% 
-\contentsline {subsubsection}{\numberline {2.8.1}Attributes}{7}{subsubsection.2.8.1}% 
+\contentsline {subsubsection}{\numberline {2.8.1}Attributes}{8}{subsubsection.2.8.1}% 
 \contentsline {subsection}{\numberline {2.9}DOUBLE\_CARD}{8}{subsection.2.9}% 
 \contentsline {subsubsection}{\numberline {2.9.1}Attributes}{8}{subsubsection.2.9.1}% 
 \contentsline {subsection}{\numberline {2.10}SUBTYPE}{9}{subsection.2.10}% 
 \contentsline {subsubsection}{\numberline {2.10.1}Attributes}{9}{subsubsection.2.10.1}% 
 \contentsline {subsection}{\numberline {2.11}COLOR\_IDENTITY}{9}{subsection.2.11}% 
 \contentsline {subsubsection}{\numberline {2.11.1}Attributes}{9}{subsubsection.2.11.1}% 
+\contentsline {section}{\numberline {3}Domain Descriptions of Certain Attributes}{10}{section.3}% 
