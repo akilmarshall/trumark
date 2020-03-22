@@ -5,7 +5,7 @@ Trumark is a database system that implements a website front end to facilitate q
 * <s>should color_identity in the CARD table be a multivalued attribute? (lands can be identified as having one or more colors)?</s>
 * <s>update schema to reflect the intended implementation</s>
 * implement search box stump
-* database implementation
+* <s>database implementation</s>
 * magic card data mass import
 
 ## Implementation
