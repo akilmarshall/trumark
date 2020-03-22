@@ -159,12 +159,12 @@ Note: Datatypes are SQLite datatypes of the following:  INTEGER, TEXT, BLOB, REA
 
 \tablesection{COLOR\_IDENTITY}{description}
 \attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
-\attribute{red}{A flag to indicate the cards alignment with red.}{Boolean}{Any valid boolean.}
-\attribute{blue}{A flag to indicate the cards alignment with blue.}{Boolean}{Any valid boolean.}
-\attribute{green}{A flag to indicate the cards alignment with green.}{Boolean}{Any valid boolean.}
-\attribute{white}{A flag to indicate the cards alignment with white.}{Boolean}{Any valid boolean.}
-\attribute{black}{A flag to indicate the cards alignment with black.}{Boolean}{Any valid boolean.}
-\attribute{colorless}{A flag to indicate the cards alignment with colorless.}{Boolean}{Any valid boolean.}
+\attribute{red}{A flag to indicate the cards alignment with red.}{BOOLEAN}{Any valid boolean.}
+\attribute{blue}{A flag to indicate the cards alignment with blue.}{BOOLEAN}{Any valid boolean.}
+\attribute{green}{A flag to indicate the cards alignment with green.}{BOOLEAN}{Any valid boolean.}
+\attribute{white}{A flag to indicate the cards alignment with white.}{BOOLEAN}{Any valid boolean.}
+\attribute{black}{A flag to indicate the cards alignment with black.}{BOOLEAN}{Any valid boolean.}
+\attribute{colorless}{A flag to indicate the cards alignment with colorless.}{BOOLEAN}{Any valid boolean.}
 % A CARD has a name but could be in multiple SETs so the SET name is used in conjunction to make a unique CARD identification.
 % CARD cost is NA$\star$ where N $\in \mathbb{Z}_{\geq 0}$ and $A \in {B, U, R, G, W}$ for black, blue, red, green, white and $\star$ is zero or more.
 % Converted cost is a calculated attribute and is the numerical count of the colorless cost plus color cost.
