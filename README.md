@@ -34,6 +34,6 @@ Note: as the schema/documentation is updated the diagram/document must be recomp
 - SQLite
 
 ## Developed by:
-- Akil **Mar**shall
 - John **K**uroda
+- Akil **Mar**shall
 - Israel **Tru**sdell
