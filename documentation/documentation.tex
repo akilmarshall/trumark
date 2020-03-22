@@ -168,6 +168,12 @@ write something about why we did the things we did.
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
 \attribute{supertype}{The supertype of the card (legendary, snow, etc).}{String}{Any valid magic card subtype.}
 
+\tablesection{TYPE}{
+    Magic cards may have one or more types, this table implements that one-to-many relationship.
+}
+\attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}
+\attribute{type}{The type of the card (creature, artifact, etc).}{String}{Any valid magic card type.}
+
 \tablesection{SUBTYPE}{
     Magic cards may have zero or more subtypes, this table implements that one-to-many relationship.
 }
@@ -188,6 +194,32 @@ write something about why we did the things we did.
 
 \section{Domain Descriptions of Certain Attributes}
 In this section we describe in detail and give examples of the attributes domain for those attributes that we can reasonably do so.
+
+\subsection{SET.set\_type}
+\subsubsection{Domain Values}
+\begin{multicols}{3}
+    \begin{itemize}
+            \item treasure\_chest
+            \item token
+            \item duel\_deck
+            \item premium\_deck
+            \item starter
+            \item memorabilia
+            \item draft\_innovation
+            \item spellbook
+            \item masterpiece
+            \item promo
+            \item funny
+            \item from\_the\_vault
+            \item planechase
+            \item core
+            \item masters
+            \item expansion
+            \item box
+            \item commander
+            \item archenemy
+    \end{itemize}
+\end{multicols}
 % \section{Lists of Type Instances}
 % \subsection{Supertype}
 % \begin{multicols}{3}

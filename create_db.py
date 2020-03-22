@@ -118,6 +118,15 @@ class Supertype(Base):
     Card = relationship('Card', backref='Supertype')
 
 
+class Type(Base):
+    __tablename__ = 'TYPE'
+
+    card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
+    supertype = Column(String, nullable=False)
+
+    Card = relationship('Card', backref='Type')
+
+
 class Color_identity(Base):
     __tablename__ = 'COLOR_IDENTITY'
 

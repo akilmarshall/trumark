@@ -26,11 +26,9 @@ digraph {
         <tr><td><i>CARD</i></td></tr>
         <tr><td port="1"><u><font color="black">card_name</font></u></td></tr>
         <tr><td port="2">text</td></tr>
-        <tr><td port="4">type</td></tr>
-        <tr><td port="5">supertype</td></tr>
-        <tr><td port="6">power</td></tr>
-        <tr><td port="7">toughness</td></tr>
-        <tr><td port="8">loyalty</td></tr>
+        <tr><td port="3">power</td></tr>
+        <tr><td port="4">toughness</td></tr>
+        <tr><td port="5">loyalty</td></tr>
         </table>>];
 
     Contains [label=<
@@ -62,6 +60,13 @@ digraph {
     <tr><td port="2"><u>card_name</u></td></tr>
     <tr><td port="3">limitation_type</td></tr>
     </table>>];
+
+    Type [label=<
+        <table border="0" cellborder="1" cellspacing="0">
+        <tr><td><i>TYPE</i></td></tr>
+        <tr><td port="1"><u>card_name</u></td></tr>
+        <tr><td port="2">type</td></tr>
+        </table>>];
 
     Subtype [label=<
         <table border="0" cellborder="1" cellspacing="0">
@@ -124,7 +129,9 @@ digraph {
     Set:1 -> Double_card:3;
 
 
-    Card:1 -> Subtype:1 ;
+    Card:1 -> Subtype:1;
+
+    Card:1 -> Type:1;
 
     Card:1 -> Supertype:1 ;
 
