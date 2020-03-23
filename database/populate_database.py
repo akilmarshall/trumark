@@ -39,6 +39,7 @@ def populate_format():
         copies_allowed=1,
         format_type='constructed',
         multiplayer=True)
+
     session.add(brawl)
 
     commander = Format(
@@ -48,6 +49,7 @@ def populate_format():
         copies_allowed=1,
         format_type='constructed',
         multiplayer=False)
+
     session.add(commander)
 
     duel = Format(
@@ -57,6 +59,7 @@ def populate_format():
         copies_allowed=1,
         format_type='constructed',
         multiplayer=False)
+
     session.add(duel)
 
     frontier = Format(
@@ -66,6 +69,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(frontier)
 
     legacy = Format(
@@ -75,6 +79,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(legacy)
 
     modern = Format(
@@ -84,6 +89,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(modern)
 
     pauper = Format(
@@ -93,6 +99,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(pauper)
 
     penny = Format(
@@ -102,6 +109,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(penny)
 
     pioneer = Format(
@@ -111,6 +119,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(pioneer)
 
     standard = Format(
@@ -120,6 +129,7 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
+
     session.add(standard)
 
     vintage = Format(
@@ -129,8 +139,8 @@ def populate_format():
         copies_allowed=4,
         format_type='constructed',
         multiplayer=False)
-    session.add(vintage)
 
+    session.add(vintage)
     session.commit()
 
 

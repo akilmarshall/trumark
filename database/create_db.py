@@ -4,11 +4,13 @@ from sqlalchemy.orm import backref, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 
+
 DB_PATH = 'sqlite:///trumark.db'
 engine = create_engine(DB_PATH, echo = True)
 engine.execute('pragma foreign_keys=on')  # Foreign keys are disable by default in SQLite
 
 Base = declarative_base()
+
 
 class Card(Base):
     __tablename__ = 'CARD'
@@ -89,7 +91,7 @@ class Color_cost(Base):
     cost_string = Column(String, primary_key=True)
 
     # a computed column is implemented with the hyprid_property decorator on
-    # a class class or "table" method
+    # a class method or "table" method
     @hybrid_property
     def converted_cost(self):
         '''
@@ -106,7 +108,6 @@ class Color_cost(Base):
                 converted_cost += 1
 
         return converted_cost
-
 
     Card = relationship('Card', backref='Color_cost')
 
