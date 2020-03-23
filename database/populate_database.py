@@ -37,15 +37,99 @@ def populate_format():
         min_deck_size=60,
         max_deck_size=60,
         copies_allowed=1,
-        format_type='constructed')
+        format_type='constructed',
+        multiplayer=True)
     session.add(brawl)
 
     commander = Format(
         format_name='commander',
-        min_deck_size=60,
-        max_deck_size=60,
-        copies_allowed=1)
+        min_deck_size=100,
+        max_deck_size=100,
+        copies_allowed=1,
+        format_type='constructed',
+        multiplayer=False)
     session.add(commander)
+
+    duel = Format(
+        format_name='duel',
+        min_deck_size=100,
+        max_deck_size=100,
+        copies_allowed=1,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(duel)
+
+    frontier = Format(
+        format_name='frontier',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(frontier)
+
+    legacy = Format(
+        format_name='legacy',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(legacy)
+
+    modern = Format(
+        format_name='modern',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(modern)
+
+    pauper = Format(
+        format_name='pauper',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(pauper)
+
+    penny = Format(
+        format_name='penny',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(penny)
+
+    pioneer = Format(
+        format_name='pioneer',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(pioneer)
+
+    standard = Format(
+        format_name='standard',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(standard)
+
+    vintage = Format(
+        format_name='vintage',
+        min_deck_size=60,
+        max_deck_size=-1,
+        copies_allowed=4,
+        format_type='constructed',
+        multiplayer=False)
+    session.add(vintage)
 
     session.commit()
 
