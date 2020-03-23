@@ -101,11 +101,11 @@ write something about why we did the things we did.
 \attribute{format\_type}{The type of the format (constructed, draft, etc)}{String}{Valid magic format types.}
 \attribute{multiplayer}{If the format can be played by more than 2 people.}{Boolean}{Any valid boolean.}
 
-\tablesection{IS\_ALLOWED}{
-    This table is the implementation of the many-to-many relationship between FORMAT and SET\@. A format may allow many sets and a set may be included in many formats.
-}
-\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
-\attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
+% \tablesection{IS\_ALLOWED}{
+%     This table is the implementation of the many-to-many relationship between FORMAT and SET\@. A format may allow many sets and a set may be included in many formats.
+% }
+% \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
+% \attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
 
 \tablesection{CONTAINS}{
     This table is the implementation of the many-to-many relationship between CARD and SET. A card may be included in may sets and A set may contain many cards.
@@ -156,12 +156,12 @@ write something about why we did the things we did.
     Each occurrence of a character in a cost\_string is summed according to the above table.
 }{Integer}{Any non-negative integer.}
 
-\tablesection{DOUBLE\_CARD}{
-    This table allows us to describe double faced cards which are magic cards with two faces.
-}
-\attribute{side\_a}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
-\attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
-\attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
+% \tablesection{DOUBLE\_CARD}{
+%     This table allows us to describe double faced cards which are magic cards with two faces.
+% }
+% \attribute{side\_a}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
+% \attribute{side\_b}{A foreign key from CARD, specifically a card\_name.}{String}{Any valid card name.}
+% \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}
 
 
 \tablesection{SUPERTYPE}{
@@ -232,6 +232,29 @@ In this section we describe in detail and give examples of the attributes domain
             \item mythic
     \end{itemize}
 \end{multicols}
+
+\subsection{COLOR.color}
+\subsubsection{Domain Values}
+\begin{multicols}{3}
+   \begin{itemize}
+           \item black
+           \item blue
+           \item colorless
+           \item green 
+           \item red
+           \item white
+   \end{itemize} 
+\end{multicols}{3}
+
+\subsection{LIMITATION.limitation\_type}
+\subsubsection{Domain Values}
+\begin{multicols}{3}
+    \begin{itemize}
+        \item none
+        \item restricted
+        \item banned
+    \end{itemize}
+\end{multicols}{3}
 % \section{Lists of Type Instances}
 % \subsection{Supertype}
 % \begin{multicols}{3}

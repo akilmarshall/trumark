@@ -41,21 +41,6 @@ digraph {
         <tr><td port="3">rarity</td></tr>
         </table>>];
 
-    Is_allowed [label=<
-        <table border="0" cellborder="1" cellspacing="0">
-        <tr><td><i>IS_ALLOWED</i></td></tr>
-        <tr><td port="1"><u>set_code</u></td></tr>
-        <tr><td port="2"><u>format_name</u></td></tr>
-        </table>>];
-
-    Double_card [label=<
-        <table border="0" cellborder="1" cellspacing="0">
-        <tr><td><i>DOUBLE_CARD</i></td></tr>
-        <tr><td port="1"><u>side_a</u></td></tr>
-        <tr><td port="2"><u>side_b</u></td></tr>
-        <tr><td port="3"><u>set_code</u></td></tr>
-        </table>>];
-
     Limitation [label=< <table border="0" cellborder="1" cellspacing="0">
     <tr><td><i>LIMITATION</i></td></tr>
     <tr><td port="1"><u>format_name</u></td></tr>
@@ -110,8 +95,6 @@ digraph {
         <tr><td port="2">color</td></tr>
         </table>>];
 
-    Is_allowed:1 -> Set:1 [color=black];
-    Is_allowed:2 -> Format:1;
 
     Contains:1 -> Set:1 [color=black];
     Contains:2 -> Card:1;
@@ -125,9 +108,6 @@ digraph {
 
     edge [dir="back"];
 
-    Card:1 -> Double_card:1;
-    Card:1 -> Double_card:2;
-    Set:1 -> Double_card:3;
 
 
     Card:1 -> Subtype:1;

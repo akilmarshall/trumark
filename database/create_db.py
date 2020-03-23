@@ -1,3 +1,4 @@
+import re
 from sqlalchemy import create_engine, MetaData, Table, Integer, Float, String, Boolean, Column, ForeignKey
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -12,6 +13,7 @@ Base = declarative_base()
 class Card(Base):
     __tablename__ = 'CARD'
 
+    # _id = Column(Integer, autoincrement=True, primary_key=True)
     card_name = Column(String, primary_key=True)
     text = Column(String, nullable=True)
     power = Column(Integer, nullable=True)
@@ -33,20 +35,20 @@ class Format(Base):
 class Set(Base):
     __tablename__ = 'SET'
 
-    set_code = Column(Integer, primary_key=True)
+    set_code = Column(String, primary_key=True)
     set_name = Column(String, nullable=False)
-    release_date = Column(Integer, nullable=False)
+    release_date = Column(String, nullable=False)
     set_type = Column(String, nullable=False)
 
 
-class Is_allowed(Base):
-    __tablename__ = 'IS_ALLOWED'
+# class Is_allowed(Base):
+#     __tablename__ = 'IS_ALLOWED'
 
-    set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
-    format_name = Column(String, ForeignKey('FORMAT.format_name'), primary_key=True)
+#     set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
+#     format_name = Column(String, ForeignKey('FORMAT.format_name'), primary_key=True)
 
-    Format = relationship('Format', backref='Is_allowed')
-    Set = relationship('Set', backref='Is_allowed')
+#     Format = relationship('Format', backref='Is_allowed')
+#     Set = relationship('Set', backref='Is_allowed')
 
 
 class Contains(Base):
@@ -85,7 +87,26 @@ class Color_cost(Base):
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
     cost_string = Column(String, primary_key=True)
-    converted_cost = Column(Integer, nullable=False)
+
+    # a computed column is implemented with the hyprid_property decorator on
+    # a class class or "table" method
+    @hybrid_property
+    def converted_cost(self):
+        '''
+        this method computes the hybrid cost of the card
+        '''
+        pattern = '(\d*)(\w*)'  # split the leading digits and trailing letters
+        matches = re.search(pattern, self.cost_string)
+        digits, letters = matches.groups()
+        converted_cost = 0
+        if digits:
+            converted_cost += int(digits)
+        for s in letters:
+            if s != 'X':
+                converted_cost += 1
+
+        return converted_cost
+
 
     Card = relationship('Card', backref='Color_cost')
 
@@ -124,7 +145,7 @@ class Type(Base):
     __tablename__ = 'TYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    type = Column(String, nullable=False)
+    type_ = Column(String, nullable=False)
 
     Card = relationship('Card', backref='Type')
 
