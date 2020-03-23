@@ -11,6 +11,7 @@ digraph {
         <tr><td port="3">max_deck_size</td></tr>
         <tr><td port="4">copies_allowed</td></tr>
         <tr><td port="5">format_type</td></tr>
+        <tr><td port="6">multiplayer</td></tr>
         </table>>];
 
     Set [label=<

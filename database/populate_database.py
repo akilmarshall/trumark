@@ -36,7 +36,8 @@ def populate_format():
         format_name='brawl',
         min_deck_size=60,
         max_deck_size=60,
-        copies_allowed=1)
+        copies_allowed=1,
+        format_type='constructed')
     session.add(brawl)
 
     commander = Format(

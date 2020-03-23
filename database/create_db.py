@@ -27,6 +27,7 @@ class Format(Base):
     max_deck_size = Column(Integer, nullable=False)
     copies_allowed = Column(Integer, nullable=False)
     format_type = Column(String, nullable=False)
+    multiplayer = Column(Boolean, nullable=False)
 
 
 class Set(Base):
