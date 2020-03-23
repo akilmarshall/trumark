@@ -4,7 +4,7 @@ This script populates the database with all magic card printings from mtgjson.co
 from os.path import isfile
 import json
 import requests
-from create_db import Format
+from create_db import Format, Set
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -134,6 +134,26 @@ def populate_format():
     session.commit()
 
 
+def populate_rest(file='AllPrintings.json'):
+    '''
+    All tables except FORMAT is populated by the information in file
+    file must be the json from mtgjson.com/file/allprintings
+    '''
+    session = Session()
+
+    with open(file) as f:
+        card_sets = json.load(f)
+        for s in card_sets:
+            temp_set = Set(
+                set_code=card_sets[s]['code'],
+                set_name=card_sets[s]['name'],
+                release_date=card_sets[s]['releaseDate'])
+            session.add(temp_set)
+            session.commit()
+            quit()
+
+
+
 if __name__ == '__main__':
     all_printings = 'https://www.mtgjson.com/files/AllPrintings.json'
     file = 'AllPrintings.json'
@@ -144,5 +164,4 @@ if __name__ == '__main__':
         get_all_cards(all_printings, file)
 
     populate_format()  # populate the FORMAT table
-
-
+    populate_rest()  # populate the rest of the tables

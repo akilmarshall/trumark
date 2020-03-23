@@ -19,7 +19,7 @@ digraph {
         <tr><td><i>SET</i></td></tr>
         <tr><td port="1"><u><font color="black">set_code</font></u></td></tr>
         <tr><td port="2"><font color="black">set_name</font></td></tr>
-        <tr><td port="3">year</td></tr>
+        <tr><td port="3">release_date</td></tr>
         <tr><td port="4">set_type</td></tr>
         </table>>];
 

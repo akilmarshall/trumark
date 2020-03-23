@@ -35,7 +35,7 @@ class Set(Base):
 
     set_code = Column(Integer, primary_key=True)
     set_name = Column(String, nullable=False)
-    year = Column(Integer, nullable=False)
+    release_date = Column(Integer, nullable=False)
     set_type = Column(String, nullable=False)
 
 
