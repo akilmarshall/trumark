@@ -2,6 +2,8 @@
 Trumark is a database system that implements a website front end to facilitate querying of the database. Queries are string based using a tag systems "inspired" (read ripped) from [scryfall](https://scryfall.com/docs/syntax).
 
 ## Todo
+* complete the documentation of the domain values
+* refactor populate_database.py
 * <s>should color_identity in the CARD table be a multivalued attribute? (lands can be identified as having one or more colors)?</s>
 * <s>update schema to reflect the intended implementation</s>
 * implement search box stump
