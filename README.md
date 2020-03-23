@@ -8,7 +8,7 @@ Trumark is a database system that implements a website front end to facilitate q
 * <s>update schema to reflect the intended implementation</s>
 * implement search box stump
 * <s>database implementation</s>
-* magic card data mass import
+* <s>magic card data mass import</s>
 
 ## Implementation
 
