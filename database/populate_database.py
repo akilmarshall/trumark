@@ -4,6 +4,7 @@ This script populates the database with all magic card printings from mtgjson.co
 from os.path import isfile
 import json
 import requests
+from create_db import Format
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -30,6 +31,22 @@ def populate_format():
     this function
     '''
     session = Session()
+
+    brawl = Format(
+        format_name='brawl',
+        min_deck_size=60,
+        max_deck_size=60,
+        copies_allowed=1)
+    session.add(brawl)
+
+    commander = Format(
+        format_name='commander',
+        min_deck_size=60,
+        max_deck_size=60,
+        copies_allowed=1)
+    session.add(commander)
+
+    session.commit()
 
 
 if __name__ == '__main__':

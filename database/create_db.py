@@ -26,6 +26,7 @@ class Format(Base):
     min_deck_size = Column(Integer, nullable=False)
     max_deck_size = Column(Integer, nullable=False)
     copies_allowed = Column(Integer, nullable=False)
+    format_type = Column(String, nullable=False)
 
 
 class Set(Base):
@@ -88,16 +89,16 @@ class Color_cost(Base):
     Card = relationship('Card', backref='Color_cost')
 
 
-class Double_card(Base):
-    __tablename__ = 'DOUBLE_CARD'
+# class Double_card(Base):
+#     __tablename__ = 'DOUBLE_CARD'
 
-    side_a = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    side_b = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
+#     side_a = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
+#     side_b = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
+#     set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
 
-    Card_a = relationship('Card', backref='Double_card')
-    Card_b = relationship('Card', backref='Double_card')
-    Set = relationship('Set', backref='Double_card')
+#     Card_a = relationship('Card', backref='Double_card')
+#     Card_b = relationship('Card', backref='Double_card')
+#     Set = relationship('Set', backref='Double_card')
 
 
 class Subtype(Base):
