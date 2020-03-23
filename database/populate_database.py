@@ -134,30 +134,6 @@ def populate_format():
     session.commit()
 
 
-def populate_is_allowed():
-    '''
-    formats are distinguished by the sets they allow.
-    this function populates those relationships in the database
-    '''
-    session = Session()
-
-    def create_is_allowed_list(format_name, allowed_sets):
-        return [Is_allowed(set_code=c, format_name=format_name) for c in allowed_sets]
-
-    standard_sets = ['GRN', 'RNA', 'WAR', 'M20', 'ELD', 'THB', 'IKO', 'M21']
-    for s in create_is_allowed_list('standard', standard_sets):
-        session.merge(s)
-
-    for s in create_is_allowed_list('brawl', standard_sets):
-        session.merge(s)
-
-
-    )
-    '''
-
-
-
-
 def populate_rest(file='AllPrintings.json'):
     '''
     All tables except FORMAT is populated by the information in file
@@ -303,7 +279,6 @@ def populate_rest(file='AllPrintings.json'):
                 session.merge(color_identity_entity)
 
             session.commit()
-
 
 
 if __name__ == '__main__':
