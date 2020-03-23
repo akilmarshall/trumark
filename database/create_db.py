@@ -40,7 +40,7 @@ class Set(Base):
 class Is_allowed(Base):
     __tablename__ = 'IS_ALLOWED'
 
-    set_num = Column(Integer, ForeignKey('SET.set_num'), primary_key=True)
+    set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
     format_name = Column(String, ForeignKey('FORMAT.format_name'), primary_key=True)
 
     Format = relationship('Format', backref='Is_allowed')
@@ -50,7 +50,7 @@ class Is_allowed(Base):
 class Contains(Base):
     __tablename__ = 'CONTAINS'
 
-    set_num = Column(Integer, ForeignKey('SET.set_num'), primary_key=True)
+    set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
     rarity = Column(String, nullable=False)
 
@@ -93,7 +93,7 @@ class Double_card(Base):
 
     side_a = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
     side_b = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    set_num = Column(Integer, ForeignKey('SET.set_num'), primary_key=True)
+    set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
 
     Card_a = relationship('Card', backref='Double_card')
     Card_b = relationship('Card', backref='Double_card')
