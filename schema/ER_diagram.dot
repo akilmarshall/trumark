@@ -91,7 +91,6 @@ digraph {
         <tr><td port="4">green</td></tr>
         <tr><td port="5">black</td></tr>
         <tr><td port="6">white</td></tr>
-        <tr><td port="7">colorless</td></tr>
         </table>>];
 
     Color_cost [label=<

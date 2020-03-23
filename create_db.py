@@ -136,7 +136,6 @@ class Color_identity(Base):
     green = Column(Boolean, nullable=False)
     black = Column(Boolean, nullable=False)
     white = Column(Boolean, nullable=False)
-    colorless = Column(Boolean, nullable=False)
     converted_cost = Column(Integer, nullable=False)
 
     Card = relationship('Card', backref='Subtype')
