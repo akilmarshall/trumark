@@ -22,6 +22,8 @@ class Card(Base):
     toughness = Column(Integer, nullable=True)
     loyalty = Column(Integer, nullable=True)
 
+
+    # The following two compute columns have not been tested
     @hybrid_property
     def is_double_card_front(self):
         if 'transform' in self.text:
