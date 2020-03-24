@@ -4,7 +4,7 @@ This script populates the database with all magic card printings from mtgjson.co
 from os.path import isfile
 import json
 import requests
-from create_db import Format, Set, Contains, Limitation, Color, Color_cost, Card, Type, Subtype, Supertype, Color_identity, Is_allowed
+from create_db import Format, Set, Contains, Limitation, Color, Color_cost, Card, Type, Subtype, Supertype, Color_identity
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -18,19 +18,19 @@ def get_all_cards(source_url, file_name):
     '''
     function to download a json file located at source_url to a localfile, file_name
     '''
+
     response = requests.get(source_url)
     all_cards = json.loads(response.text)
     with open(file_name, 'w') as file:
         json.dump(all_cards, file, indent=1)
 
 
-def populate_format():
+def populate_format(session):
     '''
     certain information about formats is not stored in the json card data.
     min_deck_size, max_deck, and copies_allowed are specified manually by
     this function
     '''
-    session = Session()
 
     brawl = Format(
         format_name='brawl',
@@ -40,7 +40,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=True)
 
-    session.add(brawl)
+    session.merge(brawl)
 
     commander = Format(
         format_name='commander',
@@ -50,7 +50,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(commander)
+    session.merge(commander)
 
     duel = Format(
         format_name='duel',
@@ -60,7 +60,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(duel)
+    session.merge(duel)
 
     frontier = Format(
         format_name='frontier',
@@ -70,7 +70,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(frontier)
+    session.merge(frontier)
 
     legacy = Format(
         format_name='legacy',
@@ -80,7 +80,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(legacy)
+    session.merge(legacy)
 
     modern = Format(
         format_name='modern',
@@ -90,7 +90,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(modern)
+    session.merge(modern)
 
     pauper = Format(
         format_name='pauper',
@@ -100,7 +100,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(pauper)
+    session.merge(pauper)
 
     penny = Format(
         format_name='penny',
@@ -110,7 +110,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(penny)
+    session.merge(penny)
 
     pioneer = Format(
         format_name='pioneer',
@@ -120,7 +120,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(pioneer)
+    session.merge(pioneer)
 
     standard = Format(
         format_name='standard',
@@ -130,7 +130,7 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(standard)
+    session.merge(standard)
 
     vintage = Format(
         format_name='vintage',
@@ -140,11 +140,220 @@ def populate_format():
         format_type='constructed',
         multiplayer=False)
 
-    session.add(vintage)
-    session.commit()
+    session.merge(vintage)
 
 
-def populate_rest(file='AllPrintings.json'):
+def populate_set(session, set_):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card_set populate the Set table
+    see https://www.mtgjson.com/structures/set/ for details about the dictionary
+    '''
+
+    # A Set entity to be added to the SET table
+    set_entity = Set(
+        set_code=set_.get('code'),
+        set_name=set_.get('name'),
+        release_date=set_.get('releaseDate'),
+        set_type=set_.get('type'))
+
+    session.merge(set_entity)
+
+
+def populate_card(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the Card table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    # A Card entity to be added to the CARD table
+    card_entity = Card(
+        card_name=card.get('name'),
+        text=card.get('text'),
+        power=card.get('power'),
+        toughness=card.get('toughness'),
+        loyalty=card.get('loyalty'))
+
+    session.merge(card_entity)  # merge updates a duplicate entry if it exists
+
+
+def populate_contains(session, card, set_code):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card and a set_code populate the Set table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+    # A Contains entity to be added to the CONTAINS table
+    contains_entity = Contains(
+        set_code=set_code,
+        card_name=card.get('name'),
+        rarity=card.get('rarity'))
+
+    session.merge(contains_entity)
+
+
+def populate_limitations(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the Limitation table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    # iterate over formats
+    for format_ in card['legalities']:
+        legality = card.get('legalities')[format_]
+        limitation_type = str()
+        if legality == 'Legal':
+            limitation_type = 'none'
+        else:
+            limitation_type = legality.lower()
+
+        # A Limitation entity to be added to the LIMITATION table
+        limitation_entity = Limitation(
+            format_name=format_,
+            card_name=card.get('name'),
+            limitation_type=limitation_type)
+
+        session.merge(limitation_entity)
+
+
+def populate_color(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the Color table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+    # dictionary to map the color letters to their corresponding word
+    color_format = {'U': 'blue', 'R': 'red', 'G': 'green', 'B': 'black', 'W': 'white'}
+    # Color entity to be added to the Color table
+    if card['colors'] == []:
+        color_entity = Color(
+            card_name=card.get('name'),
+            color='colorless')
+
+        session.merge(color_entity)
+    else:
+        for color in card['colors']:
+            color_entity = Color(
+                card_name=card.get('name'),
+                color=color_format[color])
+
+            session.merge(color_entity)
+
+
+def populate_color_cost(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the Color_cost table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    def format_cost_string(manacost):
+        '''
+        helper function to format manacost strings
+        '''
+        if manacost:
+            return manacost.replace('{', '').replace('}', '')
+
+        return ''
+
+    # Color_cost entity to be added to the Color_cost table
+    cost_string = card.get('manaCost')
+    color_cost_entity = Color_cost(
+        card_name=card.get('name'),
+        cost_string=format_cost_string(cost_string))
+
+    session.merge(color_cost_entity)
+
+
+def populate_supertype(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the supertype table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    supertype = card.get('supertype')
+    if supertype:
+        for s_type in supertype:
+            # Supertype entity to be added to the Supertype table
+            supertype_entity = Supertype(
+                card_name=card.get('name'),
+                supertype=s_type)
+
+            session.merge(supertype_entity)
+
+
+def populate_type(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the type table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+    types = card.get('types')
+    supertype = card.get('supertype')
+    subtype = card.get('subtype')
+    type_ = set(types)
+    if supertype:
+        type_.difference_update(supertype)
+
+    if subtype:
+        type_.difference_update(subtype)
+
+    # Type entity to be added to the Type table
+    for t in type_:
+        type_entity = Type(
+            card_name=card.get('name'),
+            type_=t.lower())
+
+        session.merge(type_entity)
+
+
+def populate_subtype(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the subtype table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    subtype = card.get('subtype')
+    if subtype:
+        for s_type in subtype:
+            # Subtype entity to be added to the Subtype table
+            subtype_entity = Subtype(
+                card_name=card.get('name'),
+                subtype=s_type)
+
+            session.merge(subtype_entity)
+
+
+def populate_color_identity(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the Color_identity table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    color_id = dict()  # dict to keep track of the color identity flags
+    for color in ['R', 'G', 'U', 'B', 'W']:
+        color_id[color] = False  # default alignment is false
+        if color in card['colorIdentity']:
+            color_id[color] = True
+
+    # Color_identity entity to be added to the Color_identity table
+    color_identity_entity = Color_identity(
+        card_name=card.get('name'),
+        red=color_id['R'],
+        blue=color_id['U'],
+        green=color_id['G'],
+        black=color_id['B'],
+        white=color_id['W'])
+
+    session.merge(color_identity_entity)
+
+
+def populate_rest(session, file='AllPrintings.json'):
     '''
     All tables except FORMAT is populated by the information in file
     file must be the json from mtgjson.com/file/allprintings
@@ -154,141 +363,24 @@ def populate_rest(file='AllPrintings.json'):
     in the SET table and then creates related entities in the all other tables
     of the database (excluding FORMAT and IS_ALLOWED which is populated by the populate_format function).
     '''
-    session = Session()
 
     with open(file) as f:
         card_sets = json.load(f)
         for s in card_sets:
             set_code = card_sets[s].get('code')  # will need this again a foreign key
 
-            # A Set entity to be added to the SET table
-            set_entity = Set(
-                set_code=set_code,
-                set_name=card_sets[s].get('name'),
-                release_date=card_sets[s].get('releaseDate'),
-                set_type=card_sets[s].get('type'))
-
-            session.add(set_entity)
+            populate_set(session, card_sets[s])
 
             for card in card_sets[s]['cards']:
-                card_name = card.get('name')  # will need this again as a foreign key
-
-                # A Card entity to be added to the CARD table
-                card_entity = Card(
-                    card_name=card_name,
-                    text=card.get('text'),
-                    power=card.get('power'),
-                    toughness=card.get('toughness'),
-                    loyalty=card.get('loyalty'))
-
-                session.merge(card_entity)  # merge updates a duplicate entry if it exists
-
-                # A Contains entity to be added to the CONTAINS table
-                contains_entity = Contains(
-                    set_code=set_code,
-                    card_name=card_name,
-                    rarity=card.get('rarity'))
-
-                session.merge(contains_entity)
-
-                for format_ in card['legalities']:
-                    legality = card.get('legalities')[format_]
-                    limitation_type = str()
-                    if legality == 'Legal':
-                        limitation_type = 'none'
-                    else:
-                        limitation_type = legality.lower()
-
-                    # A Limitation entity to be added to the LIMITATION table
-                    limitation_entity = Limitation(
-                        format_name=format_,
-                        card_name=card_name,
-                        limitation_type=limitation_type)
-
-                    session.merge(limitation_entity)
-
-                # dictionary to map the color letters to their corresponding word
-                color_format = {'U': 'blue', 'R': 'red', 'G': 'green', 'B': 'black', 'W': 'white'}
-                # Color entity to be added to the Color table
-                if card['colors'] == []:
-                    color_entity = Color(
-                        card_name=card_name,
-                        color='colorless')
-                else:
-                    for color in card['colors']:
-                        color_entity = Color(
-                            card_name=card_name,
-                            color=color_format[color])
-
-                session.merge(color_entity)
-
-                def format_cost_string(manacost):
-                    if manacost:
-                        return manacost.replace('{', '').replace('}', '')
-                    else:
-                        return ''
-                # Color_cost entity to be added to the Color_cost table
-                cost_string = card.get('manaCost')
-                color_cost_entity = Color_cost(
-                    card_name=card_name,
-                    cost_string=format_cost_string(cost_string))
-
-                session.merge(color_cost_entity)
-
-                supertype = card.get('supertype')
-                if supertype:
-                    for s_type in supertype:
-                        # Supertype entity to be added to the Supertype table
-                        supertype_entity = Supertype(
-                            card_name=card_name,
-                            supertype=s_type)
-
-                        session.merge(supertype_entity)
-
-                subtype = card.get('subtype')
-                if subtype:
-                    for s_type in subtype:
-                        # Subtype entity to be added to the Subtype table
-                        subtype_entity = Subtype(
-                            card_name=card_name,
-                            subtype=s_type)
-
-                        session.merge(subtype_entity)
-
-                types = card.get('types')
-                type_ = set(types)
-                if supertype:
-                    type_.difference_update(supertype)
-
-                if subtype:
-                    type_.difference_update(subtype)
-
-                # Type entity to be added to the Type table
-                for t in type_:
-                    type_entity = Type(
-                        card_name=card_name,
-                        type_=t)
-
-                    session.merge(type_entity)
-
-                color_id = dict()  # dict to keep track of the color identity flags
-                for color in ['R', 'G', 'U', 'B', 'W']:
-                    color_id[color] = False  # default alignment is false
-                    if color in card['colorIdentity']:
-                        color_id[color] = True
-
-                # Color_identity entity to be added to the Color_identity table
-                color_identity_entity = Color_identity(
-                    card_name=card_name,
-                    red=color_id['R'],
-                    blue=color_id['U'],
-                    green=color_id['G'],
-                    black=color_id['B'],
-                    white=color_id['W'])
-
-                session.merge(color_identity_entity)
-
-            session.commit()
+                populate_card(session, card)
+                populate_contains(session, card, set_code)
+                populate_limitations(session, card)
+                populate_color(session, card)
+                populate_color_cost(session, card)
+                populate_supertype(session, card)
+                populate_type(session, card)
+                populate_subtype(session, card)
+                populate_color_identity(session, card)
 
 
 if __name__ == '__main__':
@@ -300,5 +392,9 @@ if __name__ == '__main__':
         print('This will take a few minutes.')
         get_all_cards(all_printings, file)
 
-    populate_format()  # populate the FORMAT table
-    populate_rest()  # populate the rest of the tables
+    session = Session()
+
+    populate_format(session)  # populate the FORMAT table
+    populate_rest(session)  # populate the rest of the tables
+
+    session.commit()
