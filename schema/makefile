@@ -1,2 +1,2 @@
 all:
-	dot ER_diagram.dot -Tpng -o ER_diagram.png
+	dot schema.dot -Tpng -o schema.png

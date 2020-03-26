@@ -35,10 +35,25 @@
 \newpage
 \tableofcontents
 \newpage
+
+\section{Entity Relationship Diagram}
+\begin{figure}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
+    \includegraphics[width=\linewidth]{../er_diagram/er_diagram.png}
+    \caption{Entity relationship diagram.}
+    \label{fig:er_diagram}
+\end{figure}
+
+\section{Database Schema}
+\begin{figure}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
+    \includegraphics[width=\linewidth]{../schema/schema.png}
+    \caption{Database table schema}
+    \label{fig:label}
+\end{figure}
+
 \section{Efforts of Normalization}
 We took our database to the third normal form.
 \subsection{First Normal Form}
-From the text book section 14.34,
+From the text book,
 \begin{quote}
     First normal form (1NF)is now considered to be part of the formal definition of a relation in the basic (flat) relational model; historically, it was defined to disallow multivalued attributes, composite attributes, and their combinations.
     It states that the domain of an attribute must include only atomic (simple, indivisible) values and that the value of any attribute in a tuple must be a single value from the domain of that attribute.
@@ -48,7 +63,7 @@ From the text book section 14.34,
 \end{quote}
 Our schema is in first normal form by design.
 \subsection{Second Normal Form}
-From the text book, section 14.3.5
+From the text book,
 \begin{quote}
     \textbf{Definition.} A relation schema R is in 2NF if every non-prime attribute A in R is fully functionally dependent on the primary key of R.
 \end{quote}

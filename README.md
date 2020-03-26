@@ -22,7 +22,7 @@ Note: SQLite database files can be interacted with via the command line ([link](
 
 #### Schema
 [Diagram Documentation](documentation/documentation.pdf)
-![ER diagram](schema/ER_diagram.png)
+![ER diagram](schema/schema.png)
 
 Note: as the schema/documentation is updated the diagram/document must be recompiled (using the make files) so the changes are reflected visually.
 
