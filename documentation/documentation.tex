@@ -29,7 +29,7 @@
                 \item \textbf{Data type}: #3  % data type of the attribute
                 \item \textbf{Domain}: #4  % domain of the attribute
                 \item \textbf{Is primary key}: #5  % is this attribute a part of the primary key?
-                \item \textbf{Nullable}: #6  % is this attribute allowed to bo nullable?
+                \item \textbf{Nullable}: #6  % is this attribute allowed to be nullable?
             \end{itemize}
     \end{itemize}
 }
@@ -135,7 +135,7 @@ write something about why we did the things we did.
     Due to the fact that converted\_cost depends on cost\_string which is not the primary key. This table solves that problem.
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
-\attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}{Yes.}{Yes.}
+\attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}{No.}{Yes.}
 \attribute{converted\_cost}{
     The sum over a cards mana cost.
     \begin{table}[h!] % {h:here, t:top, b:bottom, p:page} add ! to override
