@@ -116,7 +116,7 @@ class Color(Base):
     __tablename__ = 'COLOR'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    color = Column(String)
+    color = Column(String, primary_key=True)
 
     Card = relationship('Card', backref='Color')
 
@@ -128,9 +128,9 @@ class Color_cost(Base):
     __tablename__ = 'COLOR_COST'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    cost_string = Column(String, primary_key=True)
+    cost_string = Column(String)
 
-    # a computed column is implemented with the hyprid_property decorator on
+    # a computed column is implemented with the hybrid_property decorator on
     # a class method or "table" method
     @hybrid_property
     def converted_cost(self):
@@ -144,6 +144,9 @@ class Color_cost(Base):
         if digits:
             converted_cost += int(digits)
         for s in letters:
+            # a band-aid fix to decrement cards with hybrid cost for each hybrid mana encounter
+            if s == '/':
+                converted_cost -= 1
             if s != 'X':
                 converted_cost += 1
 

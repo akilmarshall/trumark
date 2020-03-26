@@ -84,7 +84,7 @@ digraph {
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>COLOR_COST</i></td></tr>
         <tr><td port="1"><u>card_name</u></td></tr>
-        <tr><td port="2"><u>cost_string</u></td></tr>
+        <tr><td port="2">cost_string</td></tr>
         <tr><td port="9">converted_cost</td></tr>
         </table>>];
 
@@ -92,7 +92,7 @@ digraph {
         <table border="0" cellborder="1" cellspacing="0">
         <tr><td><i>COLOR</i></td></tr>
         <tr><td port="1"><u>card_name</u></td></tr>
-        <tr><td port="2">color</td></tr>
+        <tr><td port="2"><u>color</u></td></tr>
         </table>>];
 
 
