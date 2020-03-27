@@ -65,10 +65,13 @@ Note: Datatypes are SQLite datatypes of the following:  INTEGER, TEXT, BLOB, REA
 % \subsection{SET}
 % A SET has a unique number, name, and the year it was released.
 \tablesection{CARD}{
-    The MTG wiki had the following to say about what a card is.
-    \begin{quote}
-        In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
-    \end{quote}
+%    The MTG wiki had the following to say about what a card is.
+%    \begin{quote}
+%        In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
+%    \end{quote}
+    A CARD represents a real, phyisical, entity in Magic: The Gathering (MTG). CARDs have attributes (descirbed below) that appear as printed images or text on the playing face of the CARD. These attributes give CARDs different playable characteristics in a game. 
+
+    CARDs may or may not be grouped by these attributes. One example are all CARDs with they type creature, which represent all creature cards.  Note that under these attributes, a CARD can be uniquely identified by its name, but a CARD may be reprinted in more than one SET.  In other words, a CARD doesn't change between SETs and can be contained within one or more SETs.  
 }
 \attribute{card\_name}{The name of the card.}{TEXT}{Any valid card name.}
 \attribute{text}{Everything in the text area of the card.}{TEXT}{Any valid card text.}
@@ -79,10 +82,11 @@ Note: Datatypes are SQLite datatypes of the following:  INTEGER, TEXT, BLOB, REA
 \attribute{loyalty}{The card's loyalty.}{INTEGER}{Any non-negative integer.}
 
 \tablesection{SET}{
-    The MTG wiki had the following to say about what a set is.
-    \begin{quote}
-        A set in Magic: The Gathering is a pool of cards released together and designed for the same play environment. Cards in a set can be obtained either randomly through booster packs, or in box sets that have a fixed selection of cards. An expansion symbol and, more recently, a three-character abbreviation is printed on each card to identify the set it belongs to.
-    \end{quote}
+%    The MTG wiki had the following to say about what a set is.
+%    \begin{quote}
+%        A set in Magic: The Gathering is a pool of cards released together and designed for the same play environment. Cards in a set can be obtained either randomly through booster packs, or in box sets that have a fixed selection of cards. An expansion symbol and, more recently, a three-character abbreviation is printed on each card to identify the set it belongs to.
+%    \end{quote}
+    A SET represents a real, physical, collection of CARDs that are released together and designed for the same play environment.  SETs are released throught the year and each have a name, code (three character abbreviation) and a set symbol which is not tracked.   
 }
 \attribute{set\_code}{The alphanumeric code associated with a set.}{TEXT}{Combinations of letters and digits.}
 \attribute{set\_name}{The name of the set.}{TEXT}{Any valid set name.}
@@ -90,40 +94,50 @@ Note: Datatypes are SQLite datatypes of the following:  INTEGER, TEXT, BLOB, REA
 \attribute{set\_type}{The type of set it is (Core, expansion, etc).}{TEXT}{Any valid set type.}
 
 \tablesection{FORMAT}{
-    The MTG wiki had the following to say about what a format is.
-    \begin{quote}
-        Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
-    \end{quote}
+%    The MTG wiki had the following to say about what a format is.
+%    \begin{quote}
+%        Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
+%    \end{quote}
+    A FORMAT is representation of a set of rules and allowable SETs for deck construction and gameplay.  These restrictions define what a FORMAT is, and each FORMAT has a unique name.
 }
 \attribute{format\_name}{The name of the format.}{TEXT}{Any valid format name.}
 \attribute{min\_deck\_size}{The minimum number of cards allowed in a deck.}{INTEGER}{Any non-negative integer.}
 \attribute{max\_deck\_size}{The maximum number of cards allowed in a deck.}{Integer.}{Any integer, negative integers are interpreted as infinity.}
 \attribute{copies\_allowed}{The maximum number of copies of a card allowed in a deck.}{INTEGER}{Any non-negative integer.}
 
-\tablesection{IS\_ALLOWED}{description}
+\tablesection{IS\_ALLOWED}{
+    IS\_ALLOWED represents a many-to-many relationship between SETs and FORMATs.  A SET can either be allowed or not allowed in a particular FORMAT. Each SET can be allowed or not allowed in one or more FORMATs.  Each FORMAT can allow or not allow one or more SETs.
+}
 \attribute{set\_code}{A foreign key from SET.}{TEXT}{Combinations of letters and digits.}
 \attribute{format\_name}{A foreign key from FORMAT.}{TEXT}{Any valid format name.}
 
-\tablesection{CONTAINS}{description}
+\tablesection{CONTAINS}{
+    CONTAINS represents a one-to-many relationship between CARDs and SETs.  A CARD can be printed or reprinted in one or more SETs, but each SET can only contain one printing of that CARD in the SET (no duplicates in a SET).  Note that each CARD must be printed or reprinted with the release of a SET.  In other words, each CARD is part of at least one SET.  
+}
 \attribute{set\_code}{A foreign key from SET.}{TEXT}{Combinations of letters and digits.}
 \attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
 \attribute{rarity}{The rarity of the card (common, uncommon, etc).}{TEXT}{Any valid magic card rarity.}
 
-\tablesection{LIMITATION}{description}
+\tablesection{LIMITATION}{
+    A LIMITATION represents a many-to-many relationship between CARD and FORMAT.   The limitation or restriction of a CARD to a particular FORMAT is determined by the particular rules of the FORMAT. FORMATs can deem particular CARDs banned (not allowed in gameplay), restricted (only one copy of CARD is allowed in a deck), or illegal (CARD is not allowed).  
+}
 \attribute{format\_name}{A foreign key from FORMAT.}{TEXT}{Any valid format name.}
 \attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
 \attribute{limitation\_type}{The way in which a card is limited (banned, restricted, etc).}{TEXT}{Any valid limitation.}
 
 \tablesection{COLOR}{
-    MTG wiki had the following to say about color.
-    \begin{quote}
-        Color is a basic property of cards in Magic: The Gathering, forming the core of the game's mana system and overall strategy.
-    \end{quote}
+%    MTG wiki had the following to say about color.
+%    \begin{quote}
+%        Color is a basic property of cards in Magic: The Gathering, forming the core of the game's mana system and overall strategy.
+%    \end{quote}
+    COLOR represents a multivalued property that each card in MTG has.  CARD COLOR is primarily associated with the casting cost of the CARD and the text of the CARD.  If a COLOR shows up in the casting cost, then the CARD inherits that COLOR.  If any text in the CARD references a COLOR in some manner, then the addititional COLOR information is considered in this table.
 }
 \attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
 \attribute{color}{The color a card is associated with, usually indicated by the physical color of the card.}{TEXT}{Any valid magic card color.}
 
-\tablesection{COLOR\_COST}{description}
+\tablesection{COLOR\_COST}{
+COLOR\_COST represents symobols on a CARD indicating the cost of casting the CARD.  On a physical CARD, this can be a combination of intgers and symbols which represent color. Symbols are represented in this table with letters.  R for red, U for blue, G for green, B for black, W for white. X represents casting costs with no required color.
+}
 \attribute{card\_name}{A foreign key from CARD.}{TEXT}{Any valid card name.}
 \attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{TEXT}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}
 \attribute{converted\_cost}{
