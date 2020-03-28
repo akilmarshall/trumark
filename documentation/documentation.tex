@@ -104,7 +104,7 @@ With this each attribute depends directly on the primary key of it's table, thus
 % \end{quote}
 %The CARD table is reflective of the elements you will find on a magic card.
     
-        A CARD represents a real, phyisical, entity in Magic: The Gathering (MTG). CARDs have attributes (descirbed below) that appear as printed images or text on the playing face of the CARD. These attributes give CARDs different playable characteristics in a game.
+        A CARD represents a real, physical, entity in Magic: The Gathering (MTG). CARDs have attributes (described below) that appear as printed images or text on the playing face of the CARD. These attributes give CARDs different playable characteristics in a game.
 
     CARDs may or may not be grouped by these attributes. One example are all CARDs with they type creature, which represent all creature cards.  Note that under these attributes, a CARD can be uniquely identified by its name, but a CARD may be reprinted in more than one SET.  In other words, a CARD doesn't change between SETs and can be contained within one or more SETs.
 }
@@ -119,7 +119,7 @@ With this each attribute depends directly on the primary key of it's table, thus
 %    \begin{quote}
 %        A set in Magic: The Gathering is a pool of cards released together and designed for the same play environment. Cards in a set can be obtained either randomly through booster packs, or in box sets that have a fixed selection of cards. An expansion symbol and, more recently, a three-character abbreviation is printed on each card to identify the set it belongs to.
 %    \end{quote}
-   A SET represents a real, physical, collection of CARDs that are released together and designed for the same play environment.  SETs are released throught the year and each have a name, code (three character abbreviation) and a set symbol which is not tracked.
+   A SET represents a real, physical, collection of CARDs that are released together and designed for the same play environment.  SETs are released throughout the year and each have a name, code (three character abbreviation) and a set symbol, which is not tracked.
 }
 \attribute{set\_code}{The alphanumeric code associated with a set.}{String}{Combinations of letters and digits.}{Yes.}{No.}
 \attribute{set\_name}{The name of the set.}{String}{Any valid set name.}{No.}{No}
@@ -132,8 +132,7 @@ With this each attribute depends directly on the primary key of it's table, thus
 %        Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
 %   \end{quote}
 
-    A SET represents a real, physical, collection of CARDs that are released together and designed for the same play environment.  SETs are released throught the year and each have a name, code (three character abbreviation) and a set symbol which is not tracked.
-
+ A FORMAT is representation for a set of rules which determine gameplay.  Some of these rules can be the SETs allowed or the number of CARDs in a deck. These restrictions define a FORMAT and each FORMAT has a unique name.
 }
 \attribute{format\_name}{The name of the format.}{String}{Any valid format name.}{Yes.}{No.}
 \attribute{min\_deck\_size}{The minimum number of cards allowed in a deck.}{Integer}{Any non-negative integer.}{No.}{No.}
@@ -149,35 +148,33 @@ With this each attribute depends directly on the primary key of it's table, thus
 % \attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}
 
 \tablesection{CONTAINS}{
-    This table is the implementation of the many-to-many relationship between CARD and SET. A card may be included in may sets and A set may contain many cards.
+ %   This table is the implementation of the many-to-many relationship between CARD and SET. A card may be included in may sets and A set may contain many cards.
+    CONTAINS represents a many-to-many relationship between CARDs and SETs.  A CARD can be released (or rereleased) in one or more SETs and each SET contains multiple CARDs.  Note that while each SET can contain many CARDs, each SET can contain no duplicates of a CARD.  Also, note that each CARD must be released (or rereleased) with the release of a SET.  In other words, each CARD is part of at least one SET.
 }
 \attribute{set\_code}{A foreign key from SET.}{String}{Combinations of letters and digits.}{Yes.}{No.}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{rarity}{The rarity of the card (common, uncommon, etc).}{String}{Any valid magic card rarity.}{No.}{No.}
 
 \tablesection{LIMITATION}{
-    This table is the implementation of the many-to-many relationship between FORMAT and CARD. A format may limit many cards and a card may be limited by many formats.
-    
-       A LIMITATION represents a many-to-many relationship between CARD and FORMAT.   The limitation or restriction of a CARD to a particular FORMAT is determined by the particular rules of the FORMAT. FORMATs can deem particular CARDs banned (not allowed in gameplay), restricted (only one copy of CARD is allowed in a deck), or illegal (CARD is not allowed).
-       
+       A LIMITATION represents a many-to-many relationship between CARD and FORMAT.   The limitation or restriction of a CARD to a particular FORMAT is determined by the particular rules of the FORMAT. FORMATs can deem particular CARDs banned (not allowed in gameplay), restricted (only one copy of CARD is allowed in a deck), or illegal (CARD is not allowed). 
+
+%    This table is the implementation of the many-to-many relationship between FORMAT and CARD. A format may limit many cards and a card may be limited by many formats. 
 }
 \attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}{Yes.}{No.}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{limitation\_type}{The way in which a card is limited (banned, restricted, etc).}{String}{Any valid limitation.}{No.}{No.}
 
 \tablesection{COLOR}{
-    MTG wiki had the following to say about color.
-    \begin{quote}
-        Color is a basic property of cards in Magic: The Gathering, forming the core of the game's mana system and overall strategy.
-    \end{quote}
+        Color is a basic property of cards in Magic: The Gathering, forming the core of the game's mana system and overall strategy. \\
+
+    The COLOR table serves two purposes.  It encapsulates the one-to-many relationships between creatures and colors.  Second, it describes a fundamental aspect of magic cards.
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{color}{The color a card is associated with, usually indicated by the physical color of the card.}{String}{Any valid magic card color.}{No.}{No.}
 
 \tablesection{COLOR\_COST}{
-    Due to the fact that converted\_cost depends on cost\_string which is not the primary key. This table solves that problem.
-    COLOR\_COST represents symobols on a CARD indicating the cost of casting the CARD.  On a physical CARD, this can be a combination of intgers and symbols which represent color. Symbols are represented in this table with letters.  R for red, U for blue, G for green, B for black, W for white. X represents casting costs with no required color.
-    
+    COLOR\_COST represents symbols on a CARD indicating the cost of casting the CARD.  On a physical CARD, this can be a combination of integers and symbols which represent color. Symbols are represented in this table with letters.  R for red, U for blue, G for green, B for black, W for white. X represents variable generic casting cost with no required color. $\phi$ represents fixed generic value casting cost.
+    Note that converted\_cost depends on cost\_string, which is not the primary key. This table solves that problem.
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}{No.}{Yes.}
@@ -203,8 +200,7 @@ With this each attribute depends directly on the primary key of it's table, thus
 }{Integer}{Any non-negative integer.}{No.}{No.}
 
 \tablesection{COLOR\_IDENTITY}{
-    Each mana symbol that appears on a card is included within that cards color identity.
-    Each card is associated with one or more colors.
+    COLOR\_IDENTITY represents an association of a CARD with zero or more COLORs.  A CARD gains the COLOR of each mana symbol that appears in the COLOR\_COST (casting cost) of the CARD.  In addition a CARD can gain COLOR identity from text within that card. CARDs can have multiple COLOR\_IDENTITYs, or none (E.g. Artifacts).
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{red}{A flag to indicate the cards alignment with red.}{Boolean}{Any valid boolean.}{No.}{No.}
