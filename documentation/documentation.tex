@@ -218,7 +218,7 @@ With this each attribute depends directly on the primary key of it's table, thus
 
 
 \tablesection{SUPERTYPE}{
-    Magic cards may have one or more supertypes, this table implements that one-to-many relationship.
+    A supertype is a key word that is associated with property that it all cards under that supertype must share. (May span multiple types) Magic cards may have one or more supertypes, this table implements that one-to-many relationship. 
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{supertype}{The supertype of the card (legendary, snow, etc).}{String}{Any valid magic card subtype.}{No.}{No.}
@@ -230,7 +230,7 @@ With this each attribute depends directly on the primary key of it's table, thus
 \attribute{type}{The type of the card (creature, artifact, etc).}{String}{Any valid magic card type.}{No.}{No.}
 
 \tablesection{SUBTYPE}{
-    Magic cards may have zero or more subtypes, this table implements that one-to-many relationship.
+    A subtype is a race/class/characteristic of a card that that falls under a card type that all cards under that subtype must share. (Can’t span multiple types) Magic cards may have zero or more subtypes, this table implements that one-to-many relationship.
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{subtype}{The subtype of the card (equipment, curse, etc).}{String}{Any valid magic card subtype.}{No.}{No.}
