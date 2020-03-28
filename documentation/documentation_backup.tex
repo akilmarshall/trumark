@@ -98,12 +98,15 @@ With this each attribute depends directly on the primary key of it's table, thus
 % \subsection{SET}
 % A SET has a unique number, name, and the year it was released.
 \tablesection{CARD}{
-    The MTG wiki had the following to say about what a card is.
-    \begin{quote}
-        In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
-    \end{quote}
+%    The MTG wiki had the following to say about what a card is.
+%    \begin{quote}
+%        In Magic: The Gathering, a card is the standard component of the game. The word card usually refers to a Magic card with a Magic card front and a Magic card back, or to double-faced cards.
+% \end{quote}
+%The CARD table is reflective of the elements you will find on a magic card.
+    
+        A CARD represents a real, phyisical, entity in Magic: The Gathering (MTG). CARDs have attributes (descirbed below) that appear as printed images or text on the playing face of the CARD. These attributes give CARDs different playable characteristics in a game.
 
-    The CARD table is reflective of the elements you will find on a magic card.
+    CARDs may or may not be grouped by these attributes. One example are all CARDs with they type creature, which represent all creature cards.  Note that under these attributes, a CARD can be uniquely identified by its name, but a CARD may be reprinted in more than one SET.  In other words, a CARD doesn't change between SETs and can be contained within one or more SETs.
 }
 \attribute{card\_name}{The name of the card.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{text}{Everything in the text area of the card.}{String}{Any valid card text.}{No.}{True}
@@ -124,10 +127,13 @@ With this each attribute depends directly on the primary key of it's table, thus
 \attribute{set\_type}{The type of set it is (core, expansion, etc).}{String}{Any valid set type.}{No.}{No.}
 
 \tablesection{FORMAT}{
-    The MTG wiki had the following to say about what a format is.
-    \begin{quote}
-        Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
-    \end{quote}
+%    The MTG wiki had the following to say about what a format is.
+%    \begin{quote}
+%        Formats are different modes in which the Magic: The Gathering collectible card game can be played. Each format provides rules for deck construction and gameplay.
+%   \end{quote}
+
+    A SET represents a real, physical, collection of CARDs that are released together and designed for the same play environment.  SETs are released throught the year and each have a name, code (three character abbreviation) and a set symbol which is not tracked.
+
 }
 \attribute{format\_name}{The name of the format.}{String}{Any valid format name.}{Yes.}{No.}
 \attribute{min\_deck\_size}{The minimum number of cards allowed in a deck.}{Integer}{Any non-negative integer.}{No.}{No.}
@@ -151,6 +157,9 @@ With this each attribute depends directly on the primary key of it's table, thus
 
 \tablesection{LIMITATION}{
     This table is the implementation of the many-to-many relationship between FORMAT and CARD. A format may limit many cards and a card may be limited by many formats.
+    
+       A LIMITATION represents a many-to-many relationship between CARD and FORMAT.   The limitation or restriction of a CARD to a particular FORMAT is determined by the particular rules of the FORMAT. FORMATs can deem particular CARDs banned (not allowed in gameplay), restricted (only one copy of CARD is allowed in a deck), or illegal (CARD is not allowed).
+       
 }
 \attribute{format\_name}{A foreign key from FORMAT.}{String}{Any valid format name.}{Yes.}{No.}
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
@@ -167,6 +176,8 @@ With this each attribute depends directly on the primary key of it's table, thus
 
 \tablesection{COLOR\_COST}{
     Due to the fact that converted\_cost depends on cost\_string which is not the primary key. This table solves that problem.
+    COLOR\_COST represents symobols on a CARD indicating the cost of casting the CARD.  On a physical CARD, this can be a combination of intgers and symbols which represent color. Symbols are represented in this table with letters.  R for red, U for blue, G for green, B for black, W for white. X represents casting costs with no required color.
+    
 }
 \attribute{card\_name}{A foreign key from CARD.}{String}{Any valid card name.}{Yes.}{No.}
 \attribute{cost\_string}{An alphanumeric representation of a cards mana cost.}{String}{Strings over the alphabet $\sum=\{R, U, G, B, W, X, \phi\}$ where $\phi\in\mathbb{Z}_{>0}$ and each string that contains $\phi$ begins with $\phi$.}{No.}{Yes.}
