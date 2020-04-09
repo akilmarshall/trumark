@@ -292,8 +292,8 @@ def populate_type(session, card):
     see https://www.mtgjson.com/structures/card/ for details about the dictionary
     '''
     types = card.get('types')
-    supertype = card.get('supertype')
-    subtype = card.get('subtype')
+    supertype = card.get('supertypes')
+    subtype = card.get('subtypes')
     type_ = set(types)
     if supertype:
         type_.difference_update(supertype)
@@ -317,7 +317,7 @@ def populate_subtype(session, card):
     see https://www.mtgjson.com/structures/card/ for details about the dictionary
     '''
 
-    subtype = card.get('subtype')
+    subtype = card.get('subtypes')
     if subtype:
         for s_type in subtype:
             # Subtype entity to be added to the Subtype table
@@ -378,8 +378,8 @@ def populate_rest(session, file='AllPrintings.json'):
                 #populate_color(session, card)
                 #populate_color_cost(session, card)
                 populate_supertype(session, card)
-                #populate_type(session, card)
-                #populate_subtype(session, card)
+                populate_type(session, card)
+                populate_subtype(session, card)
                 #populate_color_identity(session, card)
 
 
