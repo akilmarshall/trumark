@@ -274,7 +274,7 @@ def populate_supertype(session, card):
     see https://www.mtgjson.com/structures/card/ for details about the dictionary
     '''
 
-    supertype = card.get('supertype')
+    supertype = card.get('supertypes')
     if supertype:
         for s_type in supertype:
             # Supertype entity to be added to the Supertype table
@@ -372,15 +372,15 @@ def populate_rest(session, file='AllPrintings.json'):
             populate_set(session, card_sets[s])
 
             for card in card_sets[s]['cards']:
-                populate_card(session, card)
-                populate_contains(session, card, set_code)
-                populate_limitations(session, card)
-                populate_color(session, card)
-                populate_color_cost(session, card)
+                #populate_card(session, card)
+                #populate_contains(session, card, set_code)
+                #populate_limitations(session, card)
+                #populate_color(session, card)
+                #populate_color_cost(session, card)
                 populate_supertype(session, card)
-                populate_type(session, card)
-                populate_subtype(session, card)
-                populate_color_identity(session, card)
+                #populate_type(session, card)
+                #populate_subtype(session, card)
+                #populate_color_identity(session, card)
 
 
 if __name__ == '__main__':
@@ -394,7 +394,8 @@ if __name__ == '__main__':
 
     session = Session()
 
-    populate_format(session)  # populate the FORMAT table
+    #populate_format(session)  # populate the FORMAT table
     populate_rest(session)  # populate the rest of the tables
+
 
     session.commit()
