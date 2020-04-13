@@ -42,7 +42,7 @@ class Card(Base):
         if len(text > 10):
             text = f'{text[0:10]}..'
 
-        return f'{self.__name__}(card_name={self.card_name}, text={text}, power={self.power}, toughness={self.toughness}, loyalty={self.loyalty})'
+        return f'{self.__tablename__}(card_name={self.card_name}, text={text}, power={self.power}, toughness={self.toughness}, loyalty={self.loyalty})'
 
 
 class Format(Base):
@@ -56,7 +56,7 @@ class Format(Base):
     multiplayer = Column(Boolean, nullable=False)
 
     def __repr__(self):
-        return f'{self.__name__}(format_name={self.format_name}, min_deck_size={self.min_deck_size}, max_deck_size={self.max_deck_size}, copies_allowed={self.copies_allowed}, format_type={self.format_type}, multiplayer={self.multiplayer})'
+        return f'{self.__tablename__}(format_name={self.format_name}, min_deck_size={self.min_deck_size}, max_deck_size={self.max_deck_size}, copies_allowed={self.copies_allowed}, format_type={self.format_type}, multiplayer={self.multiplayer})'
 
 
 class Set(Base):
@@ -68,7 +68,7 @@ class Set(Base):
     set_type = Column(String, nullable=False)
 
     def __repr__(self):
-        return f'{self.__name__}(set_code={self.set_code}, set_name={self.set_name}, release_date={self.release_date}, set_type={self.set_type})'
+        return f'{self.__tablename__}(set_code={self.set_code}, set_name={self.set_name}, release_date={self.release_date}, set_type={self.set_type})'
 
 
 # class Is_allowed(Base):
@@ -109,7 +109,7 @@ class Limitation(Base):
     Format = relationship('Format', backref='Limitation')
 
     def __repr__(self):
-        return f'{self.__name__}(format_name={self.format_name}, card_name={self.card_name}, limitation_type={self.limitation_type})'
+        return f'{self.__tablename__}(format_name={self.format_name}, card_name={self.card_name}, limitation_type={self.limitation_type})'
 
 
 class Color(Base):
@@ -121,7 +121,7 @@ class Color(Base):
     Card = relationship('Card', backref='Color')
 
     def __repr__(self):
-        return f'{self.name}(card_name={self.card_name}, color={self.color})'
+        return f'{self.__tablename__}(card_name={self.card_name}, color={self.color})'
 
 
 class Color_cost(Base):
@@ -155,7 +155,7 @@ class Color_cost(Base):
     Card = relationship('Card', backref='Color_cost')
 
     def __repr__(self):
-        return f'{self.name}(card_name={self.card_name}, cost_string={self.cost_string})'
+        return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string})'
 
 
 # class Double_card(Base):
@@ -182,7 +182,7 @@ class Subtype(Base):
     Card = relationship('Card', backref='Subtype')
 
     def __repr__(self):
-        return f'{self.name}(card_name={self.card_name}, subtype={self.subtype})'
+        return f'{self.__tablename__}(card_name={self.card_name}, subtype={self.subtype})'
 
 
 class Supertype(Base):
@@ -194,7 +194,7 @@ class Supertype(Base):
     Card = relationship('Card', backref='Supertype')
 
     def __repr__(self):
-        return f'{self.name}(card_name={self.card_name}, supertype={self.supertype})'
+        return f'{self.__tablename__}(card_name={self.card_name}, supertype={self.supertype})'
 
 
 class Type(Base):
@@ -206,7 +206,7 @@ class Type(Base):
     Card = relationship('Card', backref='Type')
 
     def __repr__(self):
-        return f'{self.name}(card_name={self.card_name}, type_={self.type_})'
+        return f'{self.__tablename__}(card_name={self.card_name}, type_={self.type_})'
 
 
 class Color_identity(Base):
@@ -222,7 +222,7 @@ class Color_identity(Base):
     Card = relationship('Card', backref='Color_identity')
 
     def __repr__(self):
-        return f'{self.name}(card_name={self.card_name}, red={self.red}, blue={self.blue}, green={self.green}, black={self.black}, white={self.white})'
+        return f'{self.__tablename__}(card_name={self.card_name}, red={self.red}, blue={self.blue}, green={self.green}, black={self.black}, white={self.white})'
 
 
 if __name__ == '__main__':
