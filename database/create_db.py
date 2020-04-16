@@ -16,7 +16,7 @@ class Card(Base):
     __tablename__ = 'CARD'
 
     # _id = Column(Integer, autoincrement=True, primary_key=True)
-    card_name = Column(String, primary_key=True)
+    card_name = Column(String, primary_key=True, index=True)
     text = Column(String, nullable=True)
     power = Column(Integer, nullable=True)
     toughness = Column(Integer, nullable=True)
@@ -116,7 +116,7 @@ class Color(Base):
     __tablename__ = 'COLOR'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    color = Column(String, primary_key=True)
+    color = Column(String, primary_key=True, index=True)
 
     Card = relationship('Card', backref='Color')
 
@@ -128,7 +128,7 @@ class Color_cost(Base):
     __tablename__ = 'COLOR_COST'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    cost_string = Column(String)
+    cost_string = Column(String, index=True)
 
     # a computed column is implemented with the hybrid_property decorator on
     # a class method or "table" method
@@ -177,7 +177,7 @@ class Subtype(Base):
     __tablename__ = 'SUBTYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    subtype = Column(String, nullable=False)
+    subtype = Column(String, nullable=False, index=True)
 
     Card = relationship('Card', backref='Subtype')
 
@@ -189,7 +189,7 @@ class Supertype(Base):
     __tablename__ = 'SUPERTYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    supertype = Column(String, nullable=False)
+    supertype = Column(String, nullable=False, index=True)
 
     Card = relationship('Card', backref='Supertype')
 
@@ -201,7 +201,7 @@ class Type(Base):
     __tablename__ = 'TYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    type_ = Column(String, nullable=False)
+    type_ = Column(String, nullable=False, index=True)
 
     Card = relationship('Card', backref='Type')
 
