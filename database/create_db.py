@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, MetaData, Table, Integer, Float, String, B
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
-
+from sqlalchemy import Index
 
 DB_PATH = 'sqlite:///trumark.db'
 engine = create_engine(DB_PATH, echo = True)
@@ -201,12 +201,13 @@ class Type(Base):
     __tablename__ = 'TYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    type_ = Column(String, nullable=False)
+    type_ = Column(String, nullable=False, index=True)
 
     Card = relationship('Card', backref='Type')
 
     def __repr__(self):
         return f'{self.__tablename__}(card_name={self.card_name}, type_={self.type_})'
+
 
 
 class Color_identity(Base):

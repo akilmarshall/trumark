@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker
 
 
 DB_PATH = 'sqlite:///trumark.db'
-engine = create_engine(DB_PATH, echo=True)
+engine = create_engine(DB_PATH)
 Session = sessionmaker(bind=engine)
 
 
@@ -372,15 +372,15 @@ def populate_rest(session, file='AllPrintings.json'):
             populate_set(session, card_sets[s])
 
             for card in card_sets[s]['cards']:
-                #populate_card(session, card)
-                #populate_contains(session, card, set_code)
-                #populate_limitations(session, card)
-                #populate_color(session, card)
-                #populate_color_cost(session, card)
+                populate_card(session, card)
+                populate_contains(session, card, set_code)
+                populate_limitations(session, card)
+                populate_color(session, card)
+                populate_color_cost(session, card)
                 populate_supertype(session, card)
                 populate_type(session, card)
                 populate_subtype(session, card)
-                #populate_color_identity(session, card)
+                populate_color_identity(session, card)
 
 
 if __name__ == '__main__':

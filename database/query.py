@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Index
 
 # import the tables
 from create_db import Card, Format, Set, Contains, Limitation, Color, \
@@ -12,12 +13,7 @@ engine = create_engine('sqlite:///trumark.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-
 formats = session.query(Format).all()
 for fmt in formats:
     print(fmt)
-
-#from sqlalchemy.schema import CreateTable
-print(dir(Card))
-print(Card.metadata)
 
