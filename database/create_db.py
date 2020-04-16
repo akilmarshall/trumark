@@ -39,7 +39,7 @@ class Card(Base):
 
     def __repr__(self):
         text = self.text
-        if len(text > 10):
+        if len(text) > 10:
             text = f'{text[0:10]}..'
 
         return f'{self.__tablename__}(card_name={self.card_name}, text={text}, power={self.power}, toughness={self.toughness}, loyalty={self.loyalty})'
