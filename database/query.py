@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Index
+from sqlalchemy import func
 
 # import the tables
 from create_db import Card, Format, Set, Contains, Limitation, Color, \
@@ -11,5 +11,16 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-for card in session.query(Card.__table__).filter(Card.card_name == 'Fireball'):
+for card in session.query(Card).filter(Card.card_name == 'Fireball'):
     print(card)
+
+for card in session.query(Card).filter(Card.text.like('%ball%')):
+    print(card)
+
+
+
+
+
+
+
+
