@@ -6,14 +6,10 @@ from sqlalchemy import Index
 from create_db import Card, Format, Set, Contains, Limitation, Color, \
     Color_cost, Subtype, Supertype, Type, Color_identity
 
-
-# TODO: (super low priority) gather all similar engine/session calls
-# to one file, base.py then can import from that.
 engine = create_engine('sqlite:///trumark.db')
 Session = sessionmaker(bind=engine)
 session = Session()
 
-formats = session.query(Format).all()
-for fmt in formats:
-    print(fmt)
 
+for card in session.query(Card.__table__).filter(Card.card_name == 'Fireball'):
+    print(card)
