@@ -29,7 +29,7 @@ print('\n\n\n\n')
 for limit in limitation_join_card.filter(Limitation.limitation_type == 'restricted'):
     print(limit)
 
-
+#for card in session.query(Card).filter(Card
 
 
 

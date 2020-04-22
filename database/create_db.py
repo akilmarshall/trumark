@@ -6,7 +6,8 @@ from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
 from sqlalchemy import Index
 
 DB_PATH = 'sqlite:///trumark.db'
-engine = create_engine(DB_PATH, echo = True)
+#engine = create_engine(DB_PATH, echo = True)
+engine = create_engine(DB_PATH)
 engine.execute('pragma foreign_keys=on')  # Foreign keys are disable by default in SQLite
 
 Base = declarative_base()
@@ -112,16 +113,16 @@ class Limitation(Base):
         return f'{self.__tablename__}(format_name={self.format_name}, card_name={self.card_name}, limitation_type={self.limitation_type})'
 
 
-class Color(Base):
-    __tablename__ = 'COLOR'
-
-    card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    color = Column(String, primary_key=True)
-
-    Card = relationship('Card', backref='Color')
-
-    def __repr__(self):
-        return f'{self.__tablename__}(card_name={self.card_name}, color={self.color})'
+#class Color(Base):
+#    __tablename__ = 'COLOR'
+#
+#    card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
+#    color = Column(String, primary_key=True)
+#
+#    Card = relationship('Card', backref='Color')
+#
+#    def __repr__(self):
+#        return f'{self.__tablename__}(card_name={self.card_name}, color={self.color})'
 
 
 class Color_cost(Base):
@@ -129,33 +130,12 @@ class Color_cost(Base):
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
     cost_string = Column(String)
-
-    # a computed column is implemented with the hybrid_property decorator on
-    # a class method or "table" method
-    @hybrid_property
-    def converted_cost(self):
-        '''
-        this method computes the hybrid cost of the card
-        '''
-        pattern = '(\d*)(\w*)'  # split the leading digits and trailing letters
-        matches = re.search(pattern, self.cost_string)
-        digits, letters = matches.groups()
-        converted_cost = 0
-        if digits:
-            converted_cost += int(digits)
-        for s in letters:
-            # a band-aid fix to decrement cards with hybrid cost for each hybrid mana encounter
-            if s == '/':
-                converted_cost -= 1
-            if s != 'X':
-                converted_cost += 1
-
-        return converted_cost
+    converted_cost = Column(Integer)
 
     Card = relationship('Card', backref='Color_cost')
 
     def __repr__(self):
-        return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string})'
+        return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string}, converted_cost={self.converted_cost})'
 
 
 # class Double_card(Base):
