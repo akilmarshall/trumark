@@ -4,13 +4,13 @@ This script populates the database with all magic card printings from mtgjson.co
 from os.path import isfile
 import json
 import requests
-from create_db import Format, Set, Contains, Limitation, Color, Color_cost, Card, Type, Subtype, Supertype, Color_identity
+from create_db import Format, Set, Contains, Limitation, Color_cost, Card, Type, Subtype, Supertype, Color_identity
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
 DB_PATH = 'sqlite:///trumark.db'
-engine = create_engine(DB_PATH, echo=True)
+engine = create_engine(DB_PATH)
 Session = sessionmaker(bind=engine)
 
 
@@ -247,21 +247,10 @@ def populate_color_cost(session, card):
     given a dictionary containing a card populate the Color_cost table
     see https://www.mtgjson.com/structures/card/ for details about the dictionary
     '''
-
-    def format_cost_string(manacost):
-        '''
-        helper function to format manacost strings
-        '''
-        if manacost:
-            return manacost.replace('{', '').replace('}', '')
-
-        return ''
-
-    # Color_cost entity to be added to the Color_cost table
-    cost_string = card.get('manaCost')
     color_cost_entity = Color_cost(
         card_name=card.get('name'),
-        cost_string=format_cost_string(cost_string))
+        cost_string=card.get('manaCost'),
+        converted_cost=int(card.get('convertedManaCost')))
 
     session.merge(color_cost_entity)
 

@@ -3,10 +3,11 @@ from sqlalchemy import create_engine, MetaData, Table, Integer, Float, String, B
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property, hybrid_method
-
+from sqlalchemy import Index
 
 DB_PATH = 'sqlite:///trumark.db'
-engine = create_engine(DB_PATH, echo = True)
+#engine = create_engine(DB_PATH, echo = True)
+engine = create_engine(DB_PATH)
 engine.execute('pragma foreign_keys=on')  # Foreign keys are disable by default in SQLite
 
 Base = declarative_base()
@@ -39,7 +40,7 @@ class Card(Base):
 
     def __repr__(self):
         text = self.text
-        if len(text > 10):
+        if len(text) > 10:
             text = f'{text[0:10]}..'
 
         return f'{self.__tablename__}(card_name={self.card_name}, text={text}, power={self.power}, toughness={self.toughness}, loyalty={self.loyalty})'
@@ -112,6 +113,7 @@ class Limitation(Base):
         return f'{self.__tablename__}(format_name={self.format_name}, card_name={self.card_name}, limitation_type={self.limitation_type})'
 
 
+<<<<<<< HEAD
 class Color(Base):
     __tablename__ = 'COLOR'
 
@@ -129,48 +131,12 @@ class Color_cost(Base):
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
     cost_string = Column(String, index=True)
-
-    # a computed column is implemented with the hybrid_property decorator on
-    # a class method or "table" method
-    @hybrid_property
-    def converted_cost(self):
-        '''
-        this method computes the hybrid cost of the card
-        '''
-        pattern = '(\d*)(\w*)'  # split the leading digits and trailing letters
-        matches = re.search(pattern, self.cost_string)
-        digits, letters = matches.groups()
-        converted_cost = 0
-        if digits:
-            converted_cost += int(digits)
-        for s in letters:
-            # a band-aid fix to decrement cards with hybrid cost for each hybrid mana encounter
-            if s == '/':
-                converted_cost -= 1
-            if s != 'X':
-                converted_cost += 1
-
-        return converted_cost
+    converted_cost = Column(Integer)
 
     Card = relationship('Card', backref='Color_cost')
 
     def __repr__(self):
-        return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string})'
-
-
-# class Double_card(Base):
-#     __tablename__ = 'DOUBLE_CARD'
-
-#     side_a = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-#     side_b = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-#     set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
-
-#     Card_a = relationship('Card', backref='Double_card')
-#     Card_b = relationship('Card', backref='Double_card')
-#     Set = relationship('Set', backref='Double_card')
-
-#    def __repr__(self):
-#        return f'{self.name}(side_a={self.side_a}, side_b={self.side_b}, set_code={self.set_code})'
+        return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string}, converted_cost={self.converted_cost})'
 
 
 class Subtype(Base):
@@ -207,6 +173,7 @@ class Type(Base):
 
     def __repr__(self):
         return f'{self.__tablename__}(card_name={self.card_name}, type_={self.type_})'
+
 
 
 class Color_identity(Base):
