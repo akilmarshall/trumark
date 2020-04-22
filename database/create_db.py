@@ -113,7 +113,6 @@ class Limitation(Base):
         return f'{self.__tablename__}(format_name={self.format_name}, card_name={self.card_name}, limitation_type={self.limitation_type})'
 
 
-<<<<<<< HEAD
 class Color(Base):
     __tablename__ = 'COLOR'
 
