@@ -17,7 +17,7 @@ class Card(Base):
     __tablename__ = 'CARD'
 
     # _id = Column(Integer, autoincrement=True, primary_key=True)
-    card_name = Column(String, primary_key=True)
+    card_name = Column(String, primary_key=True, index=True)
     text = Column(String, nullable=True)
     power = Column(Integer, nullable=True)
     toughness = Column(Integer, nullable=True)
@@ -113,23 +113,23 @@ class Limitation(Base):
         return f'{self.__tablename__}(format_name={self.format_name}, card_name={self.card_name}, limitation_type={self.limitation_type})'
 
 
-#class Color(Base):
-#    __tablename__ = 'COLOR'
-#
-#    card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-#    color = Column(String, primary_key=True)
-#
-#    Card = relationship('Card', backref='Color')
-#
-#    def __repr__(self):
-#        return f'{self.__tablename__}(card_name={self.card_name}, color={self.color})'
+class Color(Base):
+    __tablename__ = 'COLOR'
+
+    card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
+    color = Column(String, primary_key=True, index=True)
+
+    Card = relationship('Card', backref='Color')
+
+    def __repr__(self):
+        return f'{self.__tablename__}(card_name={self.card_name}, color={self.color})'
 
 
 class Color_cost(Base):
     __tablename__ = 'COLOR_COST'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    cost_string = Column(String)
+    cost_string = Column(String, index=True)
     converted_cost = Column(Integer)
 
     Card = relationship('Card', backref='Color_cost')
@@ -138,26 +138,11 @@ class Color_cost(Base):
         return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string}, converted_cost={self.converted_cost})'
 
 
-# class Double_card(Base):
-#     __tablename__ = 'DOUBLE_CARD'
-
-#     side_a = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-#     side_b = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-#     set_code = Column(Integer, ForeignKey('SET.set_code'), primary_key=True)
-
-#     Card_a = relationship('Card', backref='Double_card')
-#     Card_b = relationship('Card', backref='Double_card')
-#     Set = relationship('Set', backref='Double_card')
-
-#    def __repr__(self):
-#        return f'{self.name}(side_a={self.side_a}, side_b={self.side_b}, set_code={self.set_code})'
-
-
 class Subtype(Base):
     __tablename__ = 'SUBTYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    subtype = Column(String, nullable=False)
+    subtype = Column(String, nullable=False, index=True)
 
     Card = relationship('Card', backref='Subtype')
 
@@ -169,7 +154,7 @@ class Supertype(Base):
     __tablename__ = 'SUPERTYPE'
 
     card_name = Column(String, ForeignKey('CARD.card_name'), primary_key=True)
-    supertype = Column(String, nullable=False)
+    supertype = Column(String, nullable=False, index=True)
 
     Card = relationship('Card', backref='Supertype')
 

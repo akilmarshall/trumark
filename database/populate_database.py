@@ -218,28 +218,27 @@ def populate_limitations(session, card):
         session.merge(limitation_entity)
 
 
-#def populate_color(session, card):
-#    '''
-#    helper function of populate_rest
-#    given a dictionary containing a card populate the Color table
-#    see https://www.mtgjson.com/structures/card/ for details about the dictionary
-#    '''
-#    # dictionary to map the color letters to their corresponding word
-#    color_format = {'U': 'blue', 'R': 'red', 'G': 'green', 'B': 'black', 'W': 'white'}
-#    # Color entity to be added to the Color table
-#    if card['colors'] == []:
-#        color_entity = Color(
-#            card_name=card.get('name'),
-#            color='colorless')
-#
-#        session.merge(color_entity)
-#    else:
-#        for color in card['colors']:
-#            color_entity = Color(
-#                card_name=card.get('name'),
-#                color=color_format[color])
-#
-#            session.merge(color_entity)
+def populate_color(session, card):
+    '''
+    helper function of populate_rest
+    given a dictionary containing a card populate the Color table
+    see https://www.mtgjson.com/structures/card/ for details about the dictionary
+    '''
+
+    # Color entity to be added to the Color table
+    if card['colors'] == []:
+        color_entity = Color(
+            card_name=card.get('name'),
+            color='C')
+
+        session.merge(color_entity)
+    else:
+        for color in card['colors']:
+            color_entity = Color(
+                card_name=card.get('name'),
+                color=color)
+
+            session.merge(color_entity)
 
 
 def populate_color_cost(session, card):
@@ -364,7 +363,7 @@ def populate_rest(session, file='AllPrintings.json'):
                 populate_card(session, card)
                 populate_contains(session, card, set_code)
                 populate_limitations(session, card)
-                #populate_color(session, card)
+                populate_color(session, card)
                 populate_color_cost(session, card)
                 populate_supertype(session, card)
                 populate_type(session, card)
