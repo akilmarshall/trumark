@@ -5,7 +5,6 @@ from flask import render_template
 from flask import request
 sys.path.insert(1, '../database/')
 from create_db import *
-from create_db import Card
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database/trumark.db'
@@ -55,6 +54,20 @@ def single_query(results, domain, case):
     
     elif domain == 't': # maybe make this 'subtype',
         results = results.query(Card, Subtype).join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
+
+    elif domain == 'c': # maybe make this 'color'
+        col_d = {'r': 0, 'w': 0, 'g': 0, 'b':0, 'u': 0}
+        colors = list(case)
+        # set dict to true for color requested
+        for col in colors:
+            if col in col_d.keys():
+                col_d[col] = 1
+        results = results.query(Card).join(Color_identity).filter(Color_identity.black == col_d['b'])
+        results = results.filter(Color_identity.blue == col_d['u'])
+        results = results.filter(Color_identity.green == col_d['g'])
+        results = results.filter(Color_identity.white == col_d['w'])
+        results = results.filter(Color_identity.red == col_d['r'])
+        # search for cards that have colors, e.g., c:rg for red AND green cards
 
     return results
 
