@@ -52,6 +52,9 @@ def single_query(results, domain, case):
 
     elif domain == 'mana':  # maybe make this 'cost'
         results = results.query(Color_cost).filter(Color_cost.cost_string == case.upper())
+    
+    elif domain == 't': # maybe make this 'subtype',
+        results = results.query(Card, Subtype).join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
 
     return results
 
@@ -65,10 +68,27 @@ def append_query(results, domain, case):
                 results = results.join(Card).filter(Card.card_name.like(f'%{case}%'))
 
         elif domain == 'o':
-            results = results.join(Card).filter(Card.text.like(f'%{case}%'))
+            if 'CARD' in str(results):
+                results = results.filter(Card.text.like(f'%{case}%'))
+            else:
+                results = results.join(Card).filter(Card.text.like(f'%{case}%'))
 
         elif domain == 'mana':  # maybe make this 'cost'
-            results = results.join(Color_cost).filter(Color_cost.cost_string == case.upper())
+            if 'COLOR_COST' in str(results):
+                results = results.filter(Color_cost.cost_string == case.upper())
+            else:
+                results = results.join(Color_cost).filter(Color_cost.cost_string == case.upper())
+
+        elif domain == 't': # maybe make this 'subtype',
+            if 'SUBTYPE' in str(results) and 'CARD' in str(results):
+                results = results.filter(Subtype.subtype.like(f'%{case}%'))
+            if 'CARD' in str(results) and 'SUBTYPE' not in str(results):
+                results = results.join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
+            
+            # other cases here
+
+            if 'CARD' not in str(results) and 'SUBTYPE' not in str(results):
+                results = results.join(Card, Subtype).join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
 
     except Exception as e:
         print(e)
