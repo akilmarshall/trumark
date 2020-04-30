@@ -19,20 +19,45 @@ def index():
 
 @app.route('/', methods=['POST'])
 def getQuery():
+    d = {'Card':Card, 'Color_cost': Color_cost, 'Type': Type}
     query = request.form['query']
+    clauses = query.split(',')
+    print(clauses)
+    domain, case = clauses[0].split(':')
+    domain = domain.lower().strip()
+    case = case.lower().strip()
+    print(domain, case)
+    results = db.session
 
-    # write function to split query, based on scryfall
-    
-    # simple tests below
-    # if '!' we search for specific card by name
-    # Ex: !Sol Ring
-    if query[0] == '!':
-        card_name = query[1:]
-        results = db.session.query(Card).filter(Card.card_name == card_name)
+    results = single_query(results, domain, case)
 
-
-    
-    # function to run query
-    #results = db.session.query(Format).all()
+    for clause in clauses[1:]:
+        domain, case = clause.split(':')
+        domain = domain.lower().strip()
+        case = case.lower().strip()
+        results = append_query(results, domain, case)
 
     return render_template('results.html', results=results)
+
+
+def single_query(results, domain, case):
+
+    # search for case in text 
+    if domain == 'o':
+        results = results.query(Card).filter(Card.text.like(f'%{case}%'))
+
+    if domain == 'mana':  # maybe make this 'cost'
+        results = results.query(Color_cost).filter(Color_cost.cost_string == case.upper())
+
+    return results
+
+def append_query(results, domain, case):
+    # search for case in text 
+
+    if domain == 'o':
+        results = results.join(Card).filter(Card.text.like(f'%{case}%'))
+
+    if domain == 'mana':  # maybe make this 'cost'
+        results = results.join(Color_cost).filter(Color_cost.cost_string == case.upper())
+
+    return results
