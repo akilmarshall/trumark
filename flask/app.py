@@ -5,7 +5,7 @@ from flask import render_template
 from flask import request
 sys.path.insert(1, '../database/')
 from create_db import *
-
+from create_db import Card
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database/trumark.db'
@@ -19,7 +19,7 @@ def index():
 
 @app.route('/', methods=['POST'])
 def getQuery():
-    d = {'Card':Card, 'Color_cost': Color_cost, 'Type': Type}
+    d = {'Card':Card, 'Color_cost': Color_cost, 'Type': Type, '!': Card}
     query = request.form['query']
     clauses = query.split(',')
     print(clauses)
@@ -35,6 +35,7 @@ def getQuery():
         domain, case = clause.split(':')
         domain = domain.lower().strip()
         case = case.lower().strip()
+        print(f'[{domain}:{case}]')
         results = append_query(results, domain, case)
 
     return render_template('results.html', results=results)
@@ -43,21 +44,34 @@ def getQuery():
 def single_query(results, domain, case):
 
     # search for case in text 
-    if domain == 'o':
+    if domain == '!':  # maybe make this 'name'
+        results = results.query(Card).filter(Card.card_name.like(f'%{case}%'))
+
+    elif domain == 'o':
         results = results.query(Card).filter(Card.text.like(f'%{case}%'))
 
-    if domain == 'mana':  # maybe make this 'cost'
+    elif domain == 'mana':  # maybe make this 'cost'
         results = results.query(Color_cost).filter(Color_cost.cost_string == case.upper())
 
     return results
 
 def append_query(results, domain, case):
     # search for case in text 
+    try:
+        if domain == '!':
+            if 'CARD' in str(results):
+                results = results.filter(Card.card_name.like(f'%{case}%'))
+            else:
+                results = results.join(Card).filter(Card.card_name.like(f'%{case}%'))
 
-    if domain == 'o':
-        results = results.join(Card).filter(Card.text.like(f'%{case}%'))
+        elif domain == 'o':
+            results = results.join(Card).filter(Card.text.like(f'%{case}%'))
 
-    if domain == 'mana':  # maybe make this 'cost'
-        results = results.join(Color_cost).filter(Color_cost.cost_string == case.upper())
+        elif domain == 'mana':  # maybe make this 'cost'
+            results = results.join(Color_cost).filter(Color_cost.cost_string == case.upper())
+
+    except Exception as e:
+        print(e)
+        return ['Invalid search request, please try again']
 
     return results
