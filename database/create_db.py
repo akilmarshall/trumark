@@ -42,10 +42,9 @@ class Card(Base):
         text = self.text
         if text is not None and len(text) > 10:
             text = f'{text[0:10]}..'
-
         return f'{self.__tablename__}(card_name={self.card_name}, text={text}, power={self.power}, toughness={self.toughness}, loyalty={self.loyalty})'
 
-
+        
 class Format(Base):
     __tablename__ = 'FORMAT'
 
@@ -137,6 +136,8 @@ class Color_cost(Base):
     def __repr__(self):
         return f'{self.__tablename__}(card_name={self.card_name}, cost_string={self.cost_string}, converted_cost={self.converted_cost})'
 
+  
+
 
 class Subtype(Base):
     __tablename__ = 'SUBTYPE'
@@ -148,6 +149,8 @@ class Subtype(Base):
 
     def __repr__(self):
         return f'{self.__tablename__}(card_name={self.card_name}, subtype={self.subtype})'
+
+ 
 
 
 class Supertype(Base):
