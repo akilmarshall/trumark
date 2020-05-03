@@ -4,7 +4,7 @@ This script populates the database with all magic card printings from mtgjson.co
 from os.path import isfile
 import json
 import requests
-from create_db import Format, Set, Contains, Limitation, Color_cost, Card, Type, Subtype, Supertype, Color_identity
+from create_db import Format, Set, Contains, Limitation, Color_cost, Card, Type, Subtype, Supertype, Color_identity, Color
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
