@@ -5,6 +5,8 @@ from flask import render_template
 from flask import request
 sys.path.insert(1, '../database/')
 from create_db import *
+import operator
+import re
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database/trumark.db'
@@ -29,7 +31,7 @@ def getQuery():
     domain, case = clauses[0].split(':')
     domain = domain.lower().strip()
     case = case.lower().strip()
-    print(f'[{domain}: {case}]')
+    print(f'[{domain}:{case}]')
 
     results = db.session
     # create base case, for first clause.
@@ -61,19 +63,30 @@ def single_query(session, domain, case):
     if domain == '!':  # maybe make this 'name'
         # Search for keyword in CARD JOIN COLOR_COST
         # Wanted to see casting cost with card, always.
-        results = session.query(Card.card_name).add_column(Color_cost.cost_string).join(Color_cost).filter(Card.card_name.like(f'%{case}%'))
+        results = session.query(Card.card_name)\
+                .add_column(Color_cost.cost_string)\
+                .join(Color_cost)\
+                .filter(Card.card_name.like(f'%{case}%'))
 
     # Search for keyword in CARD text, e.g., 'o:island walk'
     elif domain == 'o': 
-        results = session.query(Card.text).add_column(Card.card_name).filter(Card.text.like(f'%{case}%'))
+        results = session.query(Card.text)\
+                .add_column(Card.card_name)\
+                .filter(Card.text.like(f'%{case}%'))
+
     # search for a specific mana cost, e.g., 'mana:{U}{U}'
     elif domain == 'mana': 
-        # cost string must include brackets, e.g., {1}{G}{G}. upper() needed because all queries are lower().
-        results = session.query(Color_cost.cost_string).add_column(Color_cost.card_name).filter(Color_cost.cost_string == case.upper())
+        # cost string must include brackets, e.g., {1}{G}{G}. 
+        # upper() needed because all queries are lower().
+        results = session.query(Color_cost.cost_string)\
+                .add_column(Color_cost.card_name)\
+                .filter(Color_cost.cost_string == case.upper())
     
     # search for a subtype, e.g., 'sub:Merfolk'
     elif domain == 'sub':
-        results = session.query(Subtype.subtype).add_column(Subtype.card_name).filter(Subtype.subtype.like(f'%{case}%'))
+        results = session.query(Subtype.subtype)\
+                .add_column(Subtype.card_name)\
+                .filter(Subtype.subtype.like(f'%{case}%'))
 
     # search for cards that have one or more colors, e.g., 'c:rg' for red AND green cards
     elif domain == 'c': # maybe make this 'color'
@@ -88,6 +101,22 @@ def single_query(session, domain, case):
         results = results.filter(Color_identity.green == col_d['g'])
         results = results.filter(Color_identity.white == col_d['w'])
         results = results.filter(Color_identity.red == col_d['r'])
+
+    # all cards with combined casting cost
+    elif domain == 'cost':
+        num = int(re.sub(r'[^\d]', '', case))
+        oper = re.sub(r'[\d]', '', case)
+        d = {'<': operator.lt,
+             '>': operator.gt,
+             '<=': operator.le,
+             '>=': operator.ge,
+             '==': operator.eq}
+        
+        results = session.query(Color_cost.converted_cost)\
+                .add_column(Color_cost.cost_string)\
+                .add_column(Color_cost.card_name)\
+                .filter(d[oper](Color_cost.converted_cost, num))
+
     
 
 
@@ -147,6 +176,41 @@ def append_query(results, domain, case):
                 results = results.add_entity(Subtype).join(Card).filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUBTYPE' not in sql_statement:
                 results = results.add_entity(Subtype).join(Card).join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
+
+        # all cards with combined casting cost
+        elif domain == 'cost':
+            # get the number to eval at by removing non digits
+            num = int(re.sub(r'[^\d]', '', case))
+            # get the operator by removing digits
+            oper = re.sub(r'[\d]', '', case)
+            
+            d = {'<': operator.lt,
+                 '>': operator.gt,
+                 '<=': operator.le,
+                 '>=': operator.ge,
+                 '==': operator.eq}
+
+            if 'COLOR_COST' not in sql_statement:
+                try:
+                    results = results.join(Color_cost)
+                except:
+                    results = results.join(Card).join(Color_cost)
+                
+            if 'cost_string' not in sql_statement and 'converted_cost' not in sql_statement:
+                results = results.add_column(Color_cost.converted_cost)\
+                        .add_column(Color_cost.cost_string)\
+                        .filter(d[oper](Color_cost.converted_cost, num))
+            if 'cost_string' not in sql_statement and 'converted_cost' in sql_statement:
+                results = results.add_column(Color_cost.cost_string)\
+                        .filter(d[oper](Color_cost.converted_cost, num))
+            if 'cost_string' in sql_statement and 'converted_cost' not in sql_statement:
+                results = results.add_column(Color_cost.converted_cost)\
+                        .filter(d[oper](Color_cost.converted_cost, num))
+            if 'cost_string' in sql_statement and 'converted_cost' in sql_statement:
+                results = results.filter(d[oper](Color_cost.converted_cost, num))
+
+
+
 
     except Exception as e:
         print(e)
