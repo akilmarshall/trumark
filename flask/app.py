@@ -8,6 +8,13 @@ from create_db import *
 import operator
 import re
 
+# global operator dict
+d = {'<': operator.lt,
+     '>': operator.gt,
+     '<=': operator.le,
+     '>=': operator.ge,
+     '==': operator.eq}
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database/trumark.db'
 db = SQLAlchemy(app)
@@ -106,11 +113,6 @@ def single_query(session, domain, case):
     elif domain == 'cost':
         num = int(re.sub(r'[^\d]', '', case))
         oper = re.sub(r'[\d]', '', case)
-        d = {'<': operator.lt,
-             '>': operator.gt,
-             '<=': operator.le,
-             '>=': operator.ge,
-             '==': operator.eq}
         
         results = session.query(Color_cost.converted_cost)\
                 .add_column(Color_cost.cost_string)\
@@ -183,12 +185,6 @@ def append_query(results, domain, case):
             num = int(re.sub(r'[^\d]', '', case))
             # get the operator by removing digits
             oper = re.sub(r'[\d]', '', case)
-            
-            d = {'<': operator.lt,
-                 '>': operator.gt,
-                 '<=': operator.le,
-                 '>=': operator.ge,
-                 '==': operator.eq}
 
             if 'COLOR_COST' not in sql_statement:
                 try:
@@ -208,8 +204,6 @@ def append_query(results, domain, case):
                         .filter(d[oper](Color_cost.converted_cost, num))
             if 'cost_string' in sql_statement and 'converted_cost' in sql_statement:
                 results = results.filter(d[oper](Color_cost.converted_cost, num))
-
-
 
 
     except Exception as e:
