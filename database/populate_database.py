@@ -369,6 +369,7 @@ def populate_rest(session, file='AllPrintings.json'):
                 populate_type(session, card)
                 populate_subtype(session, card)
                 populate_color_identity(session, card)
+                pass
 
 
 if __name__ == '__main__':
