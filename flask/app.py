@@ -19,6 +19,15 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../database/trumark.db'
 db = SQLAlchemy(app)
 
+def parseRelation(case):
+    '''helper function to parse a relational case (in query) such as <10
+    case: string, e.g., '<9, >10, == 3, <=9
+    returns: (string, string)'''
+    # get the number to eval at by removing non digits
+    val = re.sub(r'[^\d]', '', case)
+    # get the operator by removing digits
+    oper = d[re.sub(r'[\d]', '', case)]
+    return oper, val
 
 @app.route('/')
 def index():
@@ -67,7 +76,7 @@ def single_query(session, domain, case):
     that can be used as a base for further table joins or filters.'''
 
     # the default tables that we display from, we are always interested in casting cost.
-    if domain == '!':  # maybe make this 'name'
+    if domain == 'name':  # maybe make this 'name'
         # Search for keyword in CARD JOIN COLOR_COST
         # Wanted to see casting cost with card, always.
         results = session.query(Card.card_name)\
@@ -76,7 +85,7 @@ def single_query(session, domain, case):
                 .filter(Card.card_name.like(f'%{case}%'))
 
     # Search for keyword in CARD text, e.g., 'o:island walk'
-    elif domain == 'o': 
+    elif domain == 'text': 
         results = session.query(Card.text)\
                 .add_column(Card.card_name)\
                 .filter(Card.text.like(f'%{case}%'))
@@ -111,15 +120,52 @@ def single_query(session, domain, case):
 
     # all cards with combined casting cost
     elif domain == 'cost':
-        num = int(re.sub(r'[^\d]', '', case))
-        oper = re.sub(r'[\d]', '', case)
+        # get the relational data, e.g, <, 10
+        oper, num = parseRelation(case)
+        num = int(num)
         
         results = session.query(Color_cost.converted_cost)\
                 .add_column(Color_cost.cost_string)\
                 .add_column(Color_cost.card_name)\
-                .filter(d[oper](Color_cost.converted_cost, num))
+                .filter(oper(Color_cost.converted_cost, num))
 
-    
+    elif domain == 'type':
+        results = session.query(Type.type_)\
+                .add_column(Type.card_name)\
+                .filter(Type.type_.like(f'%{case}%'))
+
+    elif domain == 'in':
+        results = session.query(Contains.card_name)\
+                .add_column(Contains.set_code)\
+                .filter(Contains.card_name.like(f'%{case}%'))
+
+    elif domain == 'set':
+        '''get all card in a set given the set code.
+        Note: this cannot follow another query in a query chain'''
+        # special case where we want to get all the sets
+        if case == 'all':
+            results = session.query(Set.set_code)\
+                    .add_column(Set.set_name)\
+                    .add_column(Set.release_date)
+
+        # special case when dealing with release dates
+        elif case[0] in ['<','>','<=','>=','==']:
+            # set:<2020-05-22
+            oper = re.sub(r'[^<>=]', '', case)
+            oper = d[oper]
+            date = re.sub(r'[<>=]', '', case)
+            print(f'[{oper}] [{date}]')
+
+            results = session.query(Set.release_date)\
+                    .add_column(Set.release_date)\
+                    .add_column(Set.set_name)\
+                    .filter(oper(Set.release_date, date)).order_by(Set.release_date.desc())
+        else:
+            results = session.query(Set.set_code)\
+                    .join(Contains)\
+                    .add_column(Set.set_name)\
+                    .add_column(Contains.card_name)\
+                    .filter(Contains.set_code.like(f'%{case}%'))
 
 
     # probably add elif statements at least for type, limitation, format, and set
@@ -148,14 +194,14 @@ def append_query(results, domain, case):
         # [SELECT "COLOR_COST".card_name AS "COLOR_COST_card_name", ...]
         sql_statement = str(results)
 
-        if domain == '!':
+        if domain == 'name':
             if 'CARD' in sql_statement:
                 # CARD table already joined, just filter
                 results = results.filter(Card.card_name.like(f'%{case}%'))
             else:
                 results = results.join(Card).filter(Card.card_name.like(f'%{case}%'))
 
-        elif domain == 'o':
+        elif domain == 'text':
             if 'CARD' in sql_statement:
                 results = results.filter(Card.text.like(f'%{case}%'))
             else:
@@ -168,24 +214,36 @@ def append_query(results, domain, case):
                 results = results.join(Color_cost).filter(Color_cost.cost_string == case.upper())
         
         elif domain == 'sub':
-            print('in sub')
             # With two tables there are four conditions we need to check for before joining.
             if 'CARD' in sql_statement and 'SUBTYPE' in sql_statement:
-                results = results.add_entity(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
+                results = results.filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' in sql_statement and 'SUBTYPE' not in sql_statement:
-                results = results.add_entity(Subtype).join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
+                results = results.join(Subtype).add_column(Subtype.subtype).filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUBTYPE' in sql_statement:
-                results = results.add_entity(Subtype).join(Card).filter(Subtype.subtype.like(f'%{case}%'))
+                results = results.join(Card).filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUBTYPE' not in sql_statement:
-                results = results.add_entity(Subtype).join(Card).join(Subtype).filter(Subtype.subtype.like(f'%{case}%'))
+                results = results.join(Card).join(Subtype).add_column(Subtype.subtype).filter(Subtype.subtype.like(f'%{case}%'))
+
+
+        elif domain == 'type':
+            # With two tables there are four conditions we need to check for before joining.
+            if 'CARD' in sql_statement and 'TYPE' in sql_statement:
+                results = results.add_entity(Type).filter(Type.type_.like(f'%{case}%'))
+            if 'CARD' in sql_statement and 'TYPE' not in sql_statement:
+                results = results.add_entity(Type).join(Type).filter(Type.type_.like(f'%{case}%'))
+            if 'CARD' not in sql_statement and 'TYPE' in sql_statement:
+                results = results.add_entity(Type).join(Card).filter(Type.type_.like(f'%{case}%'))
+            if 'CARD' not in sql_statement and 'TYPE' not in sql_statement:
+                results = results.add_entity(Type).join(Card).join(Type).filter(Type.type_.like(f'%{case}%'))
+        
 
         # all cards with combined casting cost
         elif domain == 'cost':
-            # get the number to eval at by removing non digits
-            num = int(re.sub(r'[^\d]', '', case))
-            # get the operator by removing digits
-            oper = re.sub(r'[\d]', '', case)
+            # get the relational data, e.g, <, 10
+            oper, num = parseRelation(case)
+            num = int(num)
 
+            # auto join intermediate table if needed, otherwise join only whats needed
             if 'COLOR_COST' not in sql_statement:
                 try:
                     results = results.join(Color_cost)
@@ -195,15 +253,23 @@ def append_query(results, domain, case):
             if 'cost_string' not in sql_statement and 'converted_cost' not in sql_statement:
                 results = results.add_column(Color_cost.converted_cost)\
                         .add_column(Color_cost.cost_string)\
-                        .filter(d[oper](Color_cost.converted_cost, num))
+                        .filter(oper(Color_cost.converted_cost, num))
             if 'cost_string' not in sql_statement and 'converted_cost' in sql_statement:
                 results = results.add_column(Color_cost.cost_string)\
-                        .filter(d[oper](Color_cost.converted_cost, num))
+                        .filter(oper(Color_cost.converted_cost, num))
             if 'cost_string' in sql_statement and 'converted_cost' not in sql_statement:
                 results = results.add_column(Color_cost.converted_cost)\
-                        .filter(d[oper](Color_cost.converted_cost, num))
+                        .filter(oper(Color_cost.converted_cost, num))
             if 'cost_string' in sql_statement and 'converted_cost' in sql_statement:
-                results = results.filter(d[oper](Color_cost.converted_cost, num))
+                results = results.filter(oper(Color_cost.converted_cost, num))
+
+        elif domain == 'in':
+            if 'CONTAINS' not in sql_statement:
+                results = results.join(Contains.card_name)\
+                        .add_column(Contains.set_code)\
+                        .filter(Contains.card_name.like(f'%{case}%'))
+            else:
+                results = results.filter(Contains.card_name.like(f'%{case}%'))
 
 
     except Exception as e:
