@@ -22,16 +22,51 @@
   {%- endif %}
   {%- endwith %}
     <div class="jumbotron">
-      <h1>Welcome to Trumark DB</h1>
-      <p>A Magic the Gathering card database</p>
+      <h1>Welcome to Trumark DB</h1>      
    </div>
    <div>
-        <form name="search" action="." method="post">
-            <label>Query:</label>
+    <form name="search" action="." method="post">
+        <label>Query:</label>
         <input type="text" name="query" size="100">
         <input type="submit" value="submit">
         </form>
        <br>
-       <p>explanation of search tags down here</p>
+       <p>Global operators:<,>,<=,>=,==</p>
+    <form>
+        <fieldset>
+        <legend>name:</legend>
+        <label for="name">Glob search for names of cards.</label><br /> 
+        </fieldset>
+    </form>
+    <form>
+        <fieldset>
+        <legend>text:</legend>
+        <label for="name">Searches for keyword in CARD text.</label><br /> 
+        </fieldset>
+    </form>
+    <form>
+        <fieldset>
+        <legend>mana:</legend>
+        <label for="name">Search for CARD with specific mana cost.</label><br /> 
+        </fieldset>
+    </form>
+    <form>
+        <fieldset>
+        <legend>sub:</legend>
+        <label for="name">Search CARDs for subtype i.e. sub:angel.</label><br /> 
+        </fieldset>
+    </form>
+    <form>
+        <fieldset>
+        <legend>super:</legend>
+        <label for="name">Search CARDs for supertype i.e. supertype:lengendary.</label><br /> 
+        </fieldset>
+    </form>
+    <form>
+        <fieldset>
+        <legend>color:</legend>
+        <label for="name">Search for CARDs with one or more colors.</label><br /> 
+        </fieldset>
+    </form>
    </div>
 {%- endblock %}
