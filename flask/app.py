@@ -103,6 +103,12 @@ def single_query(session, domain, case):
         results = session.query(Subtype.subtype)\
                 .add_column(Subtype.card_name)\
                 .filter(Subtype.subtype.like(f'%{case}%'))
+                
+    # search for a supertype, e.g., 'super:Legendary'
+    elif domain == 'super':
+        results = session.query(Supertype.supertype)\
+                .add_column(Supertype.card_name)\
+                .filter(Supertype.supertype.like(f'%{case}%'))
 
     # search for cards that have one or more colors, e.g., 'c:rg' for red AND green cards
     elif domain == 'c': # maybe make this 'color'
@@ -223,6 +229,17 @@ def append_query(results, domain, case):
                 results = results.join(Card).filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUBTYPE' not in sql_statement:
                 results = results.join(Card).join(Subtype).add_column(Subtype.subtype).filter(Subtype.subtype.like(f'%{case}%'))
+                
+        elif domain == 'super':
+            # With two tables there are four conditions we need to check for before joining.
+            if 'CARD' in sql_statement and 'SUPERTYPE' in sql_statement:
+                results = results.filter(Supertype.supertype.like(f'%{case}%'))
+            if 'CARD' in sql_statement and 'SUPERTYPE' not in sql_statement:
+                results = results.join(Supertype).add_column(Supertype.supertype).filter(Supertype.supertype.like(f'%{case}%'))
+            if 'CARD' not in sql_statement and 'SUPERTYPE' in sql_statement:
+                results = results.join(Card).filter(Supertype.supertype.like(f'%{case}%'))
+            if 'CARD' not in sql_statement and 'SUPERTYPE' not in sql_statement:
+                results = results.join(Card).join(Supertype).add_column(Supertype.supertype).filter(Supertype.supertype.like(f'%{case}%'))
 
 
         elif domain == 'type':
