@@ -261,13 +261,17 @@ def append_query(results, domain, case):
 
         elif domain == 'type':
             # With two tables there are four conditions we need to check for before joining.
-            if 'CARD' in sql_statement and 'TYPE' in sql_statement:
+            if 'CARD' in sql_statement and '"TYPE"' in sql_statement:
+                print(1)
                 results = results.add_entity(Type).filter(Type.type_.like(f'%{case}%'))
-            if 'CARD' in sql_statement and 'TYPE' not in sql_statement:
+            if 'CARD' in sql_statement and '"TYPE"' not in sql_statement:
+                print(2)
                 results = results.add_entity(Type).join(Type).filter(Type.type_.like(f'%{case}%'))
-            if 'CARD' not in sql_statement and 'TYPE' in sql_statement:
+            if 'CARD' not in sql_statement and '"TYPE"' in sql_statement:
+                print(3)
                 results = results.add_entity(Type).join(Card).filter(Type.type_.like(f'%{case}%'))
-            if 'CARD' not in sql_statement and 'TYPE' not in sql_statement:
+            if 'CARD' not in sql_statement and '"TYPE"' not in sql_statement:
+                print(4)
                 results = results.add_entity(Type).join(Card).join(Type).filter(Type.type_.like(f'%{case}%'))
         
 
