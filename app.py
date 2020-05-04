@@ -124,8 +124,8 @@ def single_query(session, domain, case):
                 .add_column(Supertype.card_name)\
                 .filter(Supertype.supertype.like(f'%{case}%'))
 
-    # search for cards that have one or more colors, e.g., 'c:rg' for red AND green cards
-    elif domain == 'c': # maybe make this 'color'
+    # search for cards that have one or more colors, e.g., 'color:rg' for red AND green cards
+    elif domain == 'color': # maybe make this 'color'
         col_d = {'r': 0, 'w': 0, 'g': 0, 'b':0, 'u': 0}
         colors = list(case)
         # set dict to true for color requested
