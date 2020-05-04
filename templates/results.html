@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+    <head>
+        <title>MTG Database Results</title>
+        <style>
+
+        .centered {
+        margin-right: auto;
+        margin-left: auto;
+        }
+
+        a {
+        text-decoration: None;
+        }
+        a:hover {
+        background-color: orange;
+        }
+        p {
+        text-align: center;
+        font-size: 14px;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        </style>
+
+    </head>
+    <body>
+        <h1>MTG Results</h1>
+       <a href="index.html">Back to Trumark_DB</a> 
+       <br>
+       <br>
+        {% for row in results%}
+                {{ row }} 
+            <br>
+            <br>
+        {% endfor %}
+    </body>
+</html>
