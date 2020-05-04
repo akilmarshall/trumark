@@ -76,6 +76,7 @@ def getQuery():
         results = append_query(results, domain, case)
 
     # return the results to html
+    results = [str(x).replace("'","").replace('(','').replace(')','') for x in results]
     return render_template('results.html', results=results)
 
 
