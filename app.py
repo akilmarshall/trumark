@@ -38,7 +38,7 @@ def parseRelation(case):
     val = re.sub(r'[^\d]', '', case)
     # get the operator by removing digits
     oper = d[re.sub(r'[\d]', '', case)]
-    return oper, val
+    return oper, int(val)
 
 @app.route('/')
 def index():
@@ -143,7 +143,6 @@ def single_query(session, domain, case):
     elif domain == 'cost':
         # get the relational data, e.g, <, 10
         oper, num = parseRelation(case)
-        num = int(num)
         
         results = session.query(Color_cost.converted_cost)\
                 .add_column(Color_cost.cost_string)\
@@ -187,6 +186,12 @@ def single_query(session, domain, case):
                     .add_column(Set.set_name)\
                     .add_column(Contains.card_name)\
                     .filter(Contains.set_code.like(f'%{case}%'))
+
+    elif domain == 'rarity':
+            results = session.query(Contains.rarity)\
+                    .add_column(Contains.set_code)\
+                    .add_column(Contains.card_name)\
+                    .filter(Contains.rarity == case)
 
 
     # probably add elif statements at least for type, limitation, format, and set
@@ -239,11 +244,16 @@ def append_query(results, domain, case):
             if 'CARD' in sql_statement and 'SUBTYPE' in sql_statement:
                 results = results.filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' in sql_statement and 'SUBTYPE' not in sql_statement:
-                results = results.join(Subtype).add_column(Subtype.subtype).filter(Subtype.subtype.like(f'%{case}%'))
+                results = results.join(Subtype)\
+                        .add_column(Subtype.subtype)\
+                        .filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUBTYPE' in sql_statement:
                 results = results.join(Card).filter(Subtype.subtype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUBTYPE' not in sql_statement:
-                results = results.join(Card).join(Subtype).add_column(Subtype.subtype).filter(Subtype.subtype.like(f'%{case}%'))
+                results = results.join(Card)\
+                        .join(Subtype)\
+                        .add_column(Subtype.subtype)\
+                        .filter(Subtype.subtype.like(f'%{case}%'))
 
 
         elif domain == 'super':
@@ -251,35 +261,42 @@ def append_query(results, domain, case):
             if 'CARD' in sql_statement and 'SUPERTYPE' in sql_statement:
                 results = results.filter(Supertype.supertype.like(f'%{case}%'))
             if 'CARD' in sql_statement and 'SUPERTYPE' not in sql_statement:
-                results = results.join(Supertype).add_column(Supertype.supertype).filter(Supertype.supertype.like(f'%{case}%'))
+                results = results.join(Supertype)\
+                        .add_column(Supertype.supertype)\
+                        .filter(Supertype.supertype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUPERTYPE' in sql_statement:
                 results = results.join(Card).filter(Supertype.supertype.like(f'%{case}%'))
             if 'CARD' not in sql_statement and 'SUPERTYPE' not in sql_statement:
-                results = results.join(Card).join(Supertype).add_column(Supertype.supertype).filter(Supertype.supertype.like(f'%{case}%'))
+                results = results.join(Card)\
+                        .join(Supertype)\
+                        .add_column(Supertype.supertype)\
+                        .filter(Supertype.supertype.like(f'%{case}%'))
 
 
 
         elif domain == 'type':
             # With two tables there are four conditions we need to check for before joining.
             if 'CARD' in sql_statement and '"TYPE"' in sql_statement:
-                print(1)
-                results = results.add_entity(Type).filter(Type.type_.like(f'%{case}%'))
+                results = results.add_column(Type.type_).filter(Type.type_.like(f'%{case}%'))
             if 'CARD' in sql_statement and '"TYPE"' not in sql_statement:
-                print(2)
-                results = results.add_entity(Type).join(Type).filter(Type.type_.like(f'%{case}%'))
+                results = results.join(Type)\
+                        .add_column(Type.type_)\
+                        .filter(Type.type_.like(f'%{case}%'))
             if 'CARD' not in sql_statement and '"TYPE"' in sql_statement:
-                print(3)
-                results = results.add_entity(Type).join(Card).filter(Type.type_.like(f'%{case}%'))
+                results = results.join(Card)\
+                        .add_column(Type.type_)\
+                        .filter(Type.type_.like(f'%{case}%'))
             if 'CARD' not in sql_statement and '"TYPE"' not in sql_statement:
-                print(4)
-                results = results.add_entity(Type).join(Card).join(Type).filter(Type.type_.like(f'%{case}%'))
+                results = results.join(Card)\
+                        .join(Type)\
+                        .add_column(Type.type_)\
+                        .filter(Type.type_.like(f'%{case}%'))
         
 
         # all cards with combined casting cost
         elif domain == 'cost':
             # get the relational data, e.g, <, 10
             oper, num = parseRelation(case)
-            num = int(num)
 
             # auto join intermediate table if needed, otherwise join only whats needed
             if 'COLOR_COST' not in sql_statement:
@@ -308,6 +325,14 @@ def append_query(results, domain, case):
                         .filter(Contains.card_name.like(f'%{case}%'))
             else:
                 results = results.filter(Contains.card_name.like(f'%{case}%'))
+
+        elif domain == 'rarity':
+            if 'CONTAINS' not in sql_statement:
+                resutlts = results.join(Contans)
+            if 'rarity' not in sql_statement:
+                results = results.add_column(Contains.set_code)\
+                        .add_column(Contains.card_name)\
+                        .filter(Contains.rarity == case)
 
 
     except Exception as e:
