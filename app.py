@@ -329,10 +329,12 @@ def append_query(results, domain, case):
         elif domain == 'rarity':
             if 'CONTAINS' not in sql_statement:
                 resutlts = results.join(Contans)
-            if 'rarity' not in sql_statement:
+            if 'set_code' not in sql_statement:
                 results = results.add_column(Contains.set_code)\
                         .add_column(Contains.card_name)\
                         .filter(Contains.rarity == case)
+            else:
+                results = results.filter(Contains.rarity == case)
 
         elif domain == 'color': # maybe make this 'color'
 
