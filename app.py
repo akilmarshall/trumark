@@ -76,8 +76,18 @@ def getQuery():
         results = append_query(results, domain, case)
 
     # return the results to html
-    results = [str(x).replace("'","").replace('(','').replace(')','') for x in results]
-    return render_template('results.html', results=results)
+    #results = [str(x).replace("'","").replace('(','').replace(')','') for x in results]
+    solution = []
+    for x in results:
+        x = str(x)
+        x = x.replace("'","")
+        x = x.replace('(', '')
+        x = x.replace(')','')
+        x = x.replace('COLOR_IDENTITY', '')
+        x = x.replace('card_name=', '')
+        solution.append(x)
+
+    return render_template('results.html', results=solution)
 
 
 def single_query(session, domain, case):
@@ -133,11 +143,20 @@ def single_query(session, domain, case):
         for col in colors:
             if col in col_d.keys():
                 col_d[col] = 1
+        
+        #results = session.query(Color_identity.black).filter(Color_identity.black == col_d['b'])
+        #results = results.add_column(Color_identity.blue).filter(Color_identity.blue == col_d['u'])
+        #results = results.add_column(Color_identity.green).filter(Color_identity.green == col_d['g'])
+        #results = results.add_column(Color_identity.white).filter(Color_identity.white == col_d['w'])
+        #results = results.add_column(Color_identity.red).filter(Color_identity.red == col_d['r'])
+        #results = results.add_column(Color_identity.card_name)
+
         results = session.query(Color_identity).filter(Color_identity.black == col_d['b'])
         results = results.filter(Color_identity.blue == col_d['u'])
         results = results.filter(Color_identity.green == col_d['g'])
         results = results.filter(Color_identity.white == col_d['w'])
         results = results.filter(Color_identity.red == col_d['r'])
+
 
     # all cards with combined casting cost
     elif domain == 'cost':
@@ -177,9 +196,8 @@ def single_query(session, domain, case):
             print(f'[{oper}] [{date}]')
 
             results = session.query(Set.release_date)\
-                    .add_column(Set.release_date)\
                     .add_column(Set.set_name)\
-                    .filter(oper(Set.release_date, date)).order_by(Set.release_date.desc())
+                    .filter(oper(Set.release_date, date)).order_by(Set.release_date.asc())
         else:
             results = session.query(Set.set_code)\
                     .join(Contains)\
