@@ -334,6 +334,26 @@ def append_query(results, domain, case):
                         .add_column(Contains.card_name)\
                         .filter(Contains.rarity == case)
 
+        elif domain == 'color': # maybe make this 'color'
+
+            # auto join intermediate table if needed, otherwise join only whats needed
+            if 'COLOR_IDENTITY' not in sql_statement:
+                try:
+                    results = results.join(Color_identity)
+                except:
+                    results = results.join(Card).join(Color_identity)
+
+            col_d = {'r': 0, 'w': 0, 'g': 0, 'b':0, 'u': 0}
+            colors = list(case)
+            # set dict to true for color requested
+            for col in colors:
+                if col in col_d.keys():
+                    col_d[col] = 1
+            results = results.filter(Color_identity.black == col_d['b'])
+            results = results.filter(Color_identity.blue == col_d['u'])
+            results = results.filter(Color_identity.green == col_d['g'])
+            results = results.filter(Color_identity.white == col_d['w'])
+            results = results.filter(Color_identity.red == col_d['r'])
 
     except Exception as e:
         print(e)
