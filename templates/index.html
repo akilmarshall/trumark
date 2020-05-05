@@ -31,52 +31,76 @@
         <input type="submit" value="submit">
         </form>
        <br>
-       <h4><span> <em> <span> Available Commands </span> </em> </span></h4>
+       <h2><span><em><span> Available Commands </span></em></span></h2>
 <hr />
 <p><strong> [name:] </strong> Glob search for names of CARDs.</p>
 <blockquote>
-<p><em> e.g. name:Sol Ring </em></p>
+<p><em>name:&lt;card_name&gt; <strong>Returns </strong>card_name,cost</em></p>
+<p><em>e.g. name:Sol Ring<br /></em></p>
 </blockquote>
 <p><strong> [text:] </strong> Searches for keyword in CARD text.</p>
 <blockquote>
+<p><em>text:&lt;card_text&gt; <strong>Returns</strong> card_text, card_name</em></p>
 <p><em> e.g. text:island walk </em></p>
 </blockquote>
 <p><strong> [mana:] </strong> Search for CARD with specific mana cost.</p>
 <blockquote>
-<p><em> e.g. mana:{U}{U} </em></p>
+<p><em>mana:&lt;mana_type&gt; <strong>Returns</strong> mana_type, card_name</em></p>
+<p><em>e.g. mana:{U}{U} </em></p>
 </blockquote>
 <p><strong> [type:] </strong> Search for CARD with specified type</p>
 <blockquote>
-<p><em> e.g. type:creature </em></p>
+<p><em>type:&lt;card_type&gt; <strong>Return</strong> card_type, card_name</em></p>
+<p><em>e.g. type:creature </em></p>
 </blockquote>
 <p><strong> [sub:] </strong> Search for CARD with specified subtype.</p>
 <blockquote>
-<p><em> e.g. sub:angel </em></p>
+<p><em>sub:&lt;subtype&gt; <strong>Return</strong> subtype, card_name</em></p>
+<p><em>e.g. sub:angel </em></p>
 </blockquote>
-<p><strong> [super:] </strong> Search for CARD with&nbsp; specified supertype.</p>
+<p><strong> [super:] </strong> Search for CARD with specified supertype.</p>
 <blockquote>
-<p><em> e.g. super:legendary </em></p>
+<p><em>super:&lt;supertype&gt; <strong>Return</strong> supertype, card_name</em></p>
+<p><em>e.g. super:legendary <br /></em></p>
 </blockquote>
 <p><strong> [color:] </strong> Search for CARD with one or more colors.</p>
 <blockquote>
-<p><em> e.g. color:r ,&nbsp; color:rg <br /> </em></p>
+<p><em>color:&lt;color&gt; <strong>Return</strong> color, card_name</em></p>
+<p><em>e.g. color:r , color:rg <br /></em></p>
 </blockquote>
 <p><strong>[set:]</strong> Search for a particular SET.</p>
 <blockquote>
+<p><em>set:&lt;set&gt; <strong>Return</strong> set_id, set_name, card_name</em></p>
 <p><em>e.g. set:5ED</em></p>
 </blockquote>
 <p><strong>[in:]</strong> Used to Search a CARD in SET.</p>
 <blockquote>
-<p><em>e.g.in:sol ring</em></p>
+<p><em>in:&lt;card_name&gt; <strong>Return</strong> card_name, set_id</em></p>
+<p><em>e.g.in:sol ring<br /></em></p>
 </blockquote>
 <p><strong>[all]</strong> Used to get all continence of tables.</p>
 <blockquote>
-<p><em>e.g. set:all<br /></em></p>
+<p><em>&lt;table&gt;:all <strong>Return</strong> contence_of_table</em></p>
+<p><em>e.g. set:all</em></p>
 </blockquote>
-<h4>Operators&nbsp; &lt;,&gt;,&lt;=,&gt;=,==</h4>
+<p><strong>[rarity:]</strong> Search for CARDs of a specific rarity.</p>
+<blockquote>
+<p><em>rarity:&lt;rarity&gt; <strong>Return</strong> rarity, set_id, card_name</em></p>
+<p><em>e.g. rarity:rare</em></p>
+</blockquote>
+<hr />
+<h3>Operators &lt;,&gt;,&lt;=,&gt;=,==</h3>
 <p>Used in numerical comparisons.</p>
 <blockquote>
-<p><em> i.e.cost:&lt;10 </em><em></em></p>
+<p><em>cost:&lt;operator&gt; &lt;int&gt; <strong>Return</strong> card_cost, card_name</em></p>
+<p><em>e.g. cost:&lt;10 </em></p>
+</blockquote>
+<hr />
+<h3>Chaining Commands</h3>
+<blockquote>
+<p><em>type:creature,sub:angel <strong>Returns</strong> card_type, card_name, subtype</em></p>
+<p><em>type:creature,cost:&gt;=2 <strong>Return</strong> card_type, card_name, cost, mana_type</em></p>
+<p><em>in:sol ring,rarity:rare <strong>Return</strong> card_name, set_id</em></p>
 </blockquote>
    </div>
 {%- endblock %}
