@@ -157,6 +157,13 @@ def single_query(session, domain, case):
         results = results.filter(Color_identity.white == col_d['w'])
         results = results.filter(Color_identity.red == col_d['r'])
 
+    elif domain == 'fmt':
+        results = session.query(Format.format_name)\
+                .join(Limitation)\
+                .add_column(Limitation.card_name)\
+                .filter(Format.format_name == case)\
+                .filter(Limitation.limitation_type != 'banned')
+
 
     # all cards with combined casting cost
     elif domain == 'cost':
